@@ -89,6 +89,9 @@ var room_control={
 		if(room.controller.level>7){up=1;}
         if(room.memory.harvesters>0){roleUpgrader.spawn(up,room);}
         if(room.controller.level>1){
+			if(room.controller.level>5){
+				roleHarvester.Mineralspawn(room);
+			}
             if(room.memory.spawnkill != undefined){
                 var spawn_killers=_.filter(Game.creeps, (creep) => creep.memory.role == 'SKill').length;
                 if(spawn_killers==0){spawnkill.spawn(room,room.memory.spawnkill);}
@@ -174,7 +177,8 @@ var room_control={
                 roleSpook.spawn(room,room.memory.spook[pass]);
                 pass=pass+1;
             }
-        }}  
+        }
+		}  
     },  
 
     
@@ -324,6 +328,7 @@ var room_control={
 		room.memory.trucker=_.filter(Game.creeps, (creep) => creep.memory.role == 'trucker' && creep.room.name==room.name).length;
 		room.memory.distribute=_.filter(Game.creeps, (creep) => creep.memory.role == 'distribute' && creep.room.name==room.name).length;
 		room.memory.builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room.name==room.name).length;
+		room.memory.mineralHarvest = _.filter(Game.creeps, (creep) => creep.memory.role == 'mineralharvester' && creep.room.name==room.name).length;
 	},
 	minerals: function(room){
 		if(room.memory.mineral==undefined){
