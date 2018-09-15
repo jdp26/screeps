@@ -97,6 +97,48 @@ var roleHarvester = {
     
 	},
 	
+	Mineralspawn: function(room){
+	    var harvesters = room.memory.mineralHarvest;
+        var newName='Harvester'+Game.time;
+        var Body;
+        var creepsPerSource;
+        var extensions = room.memory.extensions;
+        if(extensions<2){
+            Body=[WORK,WORK,CARRY,MOVE];
+            creepsPerSource=2;
+        }
+        else if(extensions< 4){
+            Body=[WORK,WORK,WORK,CARRY,MOVE];
+            creepsPerSource=2;
+        }
+        else if(extensions< 10){
+            Body=[WORK,WORK,WORK,WORK,CARRY,MOVE];
+            creepsPerSource=1;
+        }
+        else{
+            Body=[WORK,WORK,WORK,WORK,WORK,WORK,CARRY,MOVE];
+            creepsPerSource=1;
+        }
+        
+        if(harvesters==0){
+            Body=[WORK,WORK,CARRY,MOVE];
+            creepsPerSource=2;
+        }
+		
+		if(room.storage != null && room.storage.store[RESOURCE_ENERGY]>900000){
+			creepsPerSource=0.5;
+		}       
+
+        if(harvesters<(creepsPerSource) && Game.getObjectById(room.memory.mineralid).mineralAmount>0){	         
+            if(Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'mineralharvester'}})==0){					
+                var creep =Game.creeps[newName];
+				creep.memory.home = room.name;
+				creep.memory.source=room.memory.mineralid;
+	         }
+        }
+    
+	},
+	
 };
 
 module.exports = roleHarvester;
