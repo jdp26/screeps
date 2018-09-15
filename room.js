@@ -69,8 +69,11 @@ var room_control={
 			if(room.memory.link.length>0){
 				room_control.links(room);
 			}
-			if(extractor.length>0){
+			if(room.controller.level==6 && extractor.length==0){
 				room_control.minerals(room);
+				if(room.find(FIND_CONSTRUCTION_SITES, {filter: s => s.structureType==STRUCTURE_EXTRACTOR}).length==0){
+					room.createConstructionSite(Game.getObjectById(room.memory.mineralid).pos,STRUCTURE_EXTRACTOR);
+				}
 			}
         }
     },
