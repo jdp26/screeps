@@ -1,0 +1,336 @@
+var roleHarvester = require('role.harvester');
+var roleUpgrader = require('role.upgrader');
+var roleBuilder = require('role.builder');
+var roleEngineer = require('role.engineer');
+var roleTrucker = require('role.trucker');
+var roleVandle = require('role.vandle');
+var roleRemoteTruck = require('role.remoteTruck');
+var roleDefender = require('role.defender');
+var roleDistribute = require('role.distribute');
+var roleSpook = require('role.spook');
+var roleCleaner=require('role.cleaner');
+var claim=require('claim');
+var roleReserver = require('roleReserver');
+var roleLinkMan = require('role.roleLinkMan');
+var roleTowerMan=require('role.roleTowerMan');
+var spawnkill=require('role.spawnkill');
+
+var room_control={
+    maintain: function(name){
+        room=Game.rooms[name];
+        if(room.memory.new==undefined){
+            room_control.new(room);
+        }
+        if(room.memory.scout){
+            var scoutName='Scout' + room.name;
+            if(Game.creeps[scoutName]==undefined){
+                Game.spawns[0].spawnCreep([MOVE],scoutName);
+            }
+            if(Game.creeps[scoutName].room.name != room.name){
+		        Game.creeps[scoutName].moveTo(new RoomPosition(room.name));
+        	}
+        	else{
+        	    room_control.scout(room);
+        	}
+        }
+        else{
+			//Novice Area Code
+			if(room.controller.level<4 && room.controller.safeMode==undefined) {
+				if(room.controller.safeModeAvailable >0 && room.controller.safeModeCooldown==undefined){
+				room.controller.activateSafeMode();}
+			}
+			//Normall Code
+			var structures = room.find(FIND_STRUCTURES);
+			room_control.countCreeps(room);			
+			room.memory.extensions=_.filter(structures,(structure) => structure.structureType == STRUCTURE_EXTENSION).length;
+			room.memory.road_count=_.filter(structures,(structure) => structure.structureType == STRUCTURE_ROAD).length; 
+			var container_count = _.filter(structures, (structure) => structure.structureType == STRUCTURE_CONTAINER).length;
+			room.memory.container_count=container_count;
+			var towers=_.filter(structures, (structure) => structure.structureType == STRUCTURE_TOWER);
+			var extractor=_.filter(structures, (structure) => structure.structureType == STRUCTURE_EXTRACTOR);
+			var tower_count = towers.length;
+			var eExtensionSpawns= _.filter(structures,(structure) => (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN) &&
+                        structure.energy < structure.energyCapacity);
+			if(eExtensionSpawns.length>0){room.memory.emptyExtensionSpawn=eExtensionSpawns[0].id;}
+			var eTower=_.filter(towers,(s) => s.energy<s.energyCapacity);
+			if(eTower.length>0){room.memory.emptyTower=eTower[0].id;}
+			if(room.memory.claim){
+				claim.claim(room,room.memory.claim);
+			}
+            var host=room.memory.hostile;
+			if(host>0){room_control.hostile(room);}
+            if(host==0){room_control.creepCreate(room,container_count,tower_count);}
+            room_control.tower(room,towers);
+            var stores= _.filter(structures, (s)=> s.structureType==STRUCTURE_STORAGE);
+            if(stores.length>0){room_control.store(room,stores);}
+            if(room.find(FIND_DROPPED_RESOURCES).length>0 && stores.length>0){
+                room_control.cleaner(room);
+            }
+			if(room.memory.link.length>0){
+				room_control.links(room);
+			}
+			if(extractor.length>0){
+				room_control.minerals(room);
+			}
+        }
+    },
+    creepCreate: function(room,container_count,tower_count){
+		if(Game.getObjectById(room.memory.spawns).spawning == null){
+        roleHarvester.spawn(room.memory.sources.length,room);
+        if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
+		else{
+		    //MOD TEMPORARY
+		    //var up = 4 + room.memory.mine.length;
+		    var up =4;
+		 }
+		if(room.controller.level>7){up=1;}
+        if(room.memory.harvesters>0){roleUpgrader.spawn(up,room);}
+        if(room.controller.level>1){
+            if(room.memory.spawnkill != undefined){
+                var spawn_killers=_.filter(Game.creeps, (creep) => creep.memory.role == 'SKill').length;
+                if(spawn_killers==0){spawnkill.spawn(room,room.memory.spawnkill);}
+            }
+			roleTrucker.spawn(container_count,room);
+            var sites=room.find(FIND_CONSTRUCTION_SITES);
+            roleBuilder.spawn(2*Math.min(sites.length,2),room);			
+            if((tower_count==0 || tower_count==undefined) && (room.memory.road_count>0 || room.memory.container_count>0)){roleEngineer.spawn(2,room,room.name);}
+            if(room.memory.reserve==undefined){
+                room.memory.reserve=[];
+            }
+            else if(room.memory.reserve.length>0){
+                var k=0;
+                while(k<room.memory.reserve.length){
+                    if(Game.rooms[room.memory.reserve[k]]!=undefined){
+                    roleReserver.spawn(room,room.memory.reserve[k]);}
+                    else{
+                        if(_.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook==room.memory.reserve[k]).length==0){
+                        roleSpook.spawn(room,room.memory.reserve[k]);}
+                    }
+                    k=k+1;
+                }
+            }
+            if(room.memory.mine.length>0){
+                var i=0;
+                while(i<room.memory.mine.length){
+					if(Memory.hostile[room.memory.mine[i]]==undefined){
+						Memory.hostile[room.memory.mine[i]]={};
+					}
+					else{
+						if(Game.rooms[room.memory.mine[i]] != undefined){
+						var hostile_list=Game.rooms[room.memory.mine[i]].find(FIND_HOSTILE_CREEPS);
+						Memory.hostile[room.memory.mine[i]].hostileCount=hostile_list.length;
+						if(hostile_list.length>0){
+							roleDefender.spawn(room.name,room.memory.mine[i]);
+							var host=false;
+							for(var hostile of hostile_list){
+							var damage=false;
+							var heal=false;
+								for(var part of hostile.body){
+									if(part.type==ATTACK || part.type == RANGED_ATTACK){
+										damageParts=true;
+										if(part.hits>0){
+											host=true;
+										}
+									}
+									else if(part.type=='HEAL' && part.hits>0){
+										heal=true;
+									}			
+								}
+								if(host==false && heal==true && damageParts==true){
+									host=true;
+								}
+							}
+							if(host==true){
+								Memory.hostile[room.memory.mine[i]].evacuate=true;
+							}
+							if(host==false){
+								Memory.hostile[room.memory.mine[i]].evacuate=false;
+								Memory.hostile[room.memory.mine[i]].nonhostile=true;
+							}
+						}
+						else{
+							Memory.hostile[room.memory.mine[i]].evacuate=false;
+							Memory.hostile[room.memory.mine[i]].nonhostile=false;
+						}
+					}
+					else{
+							Memory.hostile[room.memory.mine[i]].evacuate=false;
+							Memory.hostile[room.memory.mine[i]].nonhostile=false;
+						}
+					}
+                    roleVandle.spawn(room,room.memory.mine[i]);
+                    roleRemoteTruck.spawn(room,room.memory.mine[i]);
+                    //roleDefender.defend(room,room.memory.mine[i]);
+					roleReserver.spawn(room,room.memory.mine[i]);
+                    i=i+1;
+                }
+            }
+            var spk=room.memory.spook.length;
+            var pass=0;
+            while(pass<spk){
+                roleSpook.spawn(room,room.memory.spook[pass]);
+                pass=pass+1;
+            }
+        }}  
+    },  
+
+    
+    tower: function(room,t){      
+        if(t.length>0) {
+		roleTowerMan.spawn(room);
+        var count =0;		
+        while(count<t.length){
+            var tid= t[count].id; // Tower.id
+            tower=Game.getObjectById(tid);
+				if(tower.energy>0){
+					var structures=room.find(FIND_STRUCTURES);
+					var DamagedStructure = _.filter(structures,(structure) => structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_RAMPART);
+					var walls = _.filter(structures, (structure) =>  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits < room.memory.wallMax);
+					var wall_hits=1000;
+					if(room.memory.hostile>0) {
+						var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+						tower.attack(closestHostile);
+					}
+					else if(DamagedStructure.length>0) {
+    					tower.repair(DamagedStructure[0]);
+    			    }
+					else if(walls.length>0){
+						var wall_check=false;
+						var wall2;
+						while(wall_check==false){
+							wall2= _.filter(structures,(structure) => structure.hits < wall_hits && (structure.structureType == STRUCTURE_WALL ||  structure.structureType == STRUCTURE_RAMPART));
+							if(wall2.length>0){
+								wall_check=true;
+							}
+							wall_hits=wall_hits+1000;
+							if(wall_hits>room.memory.wallMax){
+								wall_check=true;
+							}
+						}
+						
+						if(wall2.length>0){
+							tower.repair(wall2[0]);
+						}
+					}
+				}
+            count=count+1;
+		}
+        }
+    },
+    
+    new: function(room){
+        room.memory = {};
+        room.memory.new=true;
+        room.memory.scout=true;
+        room.memory.wallMax=3000;
+        room.memory.link=[];
+		room.memory.spook=[];
+        for(var r in Game.rooms){
+    		if(Game.rooms[r].name==room.name){
+    			room.memory.scout=false;
+    		}
+	    }
+	    if(!room.memory.scout){
+	        room_control.scout(room);
+	    }
+	    if(room.memory.scout){
+	        var newName='Scout' + room.name;
+			if(Game.spawns[0].spawning == null){
+				Game.spawns[0].spawnCreep([MOVE],newName);
+				if(Game.creeps[newName].room.name != room.name){
+					Game.creeps[newName].moveToRoom(room.name);
+				}
+				else{
+					room_control.scout(room);
+				}
+			}
+	    }
+    },
+    scout: function(room){
+        room.memory.scout=false;
+        room.memory.spawns= [];
+	    room.memory.sources=[];
+	    room.memory.mine=[];
+	    for(var s in Game.spawns){
+	        if(Game.spawns[s].room.name==room.name){
+	            room.memory.spawns.push(Game.spawns[s].id);
+	        }
+	    }
+	    var source = room.find(FIND_SOURCES)
+	    var count=0;
+        while(count<source.length){
+            room.memory.sources.push(source[count].id);
+            count=count+1;
+        }  
+    },
+    hostile: function(room){         
+            var name='Defender' +Game.time;
+			if(Game.getObjectById(room.memory.spawns).spawning == null){
+				Game.getObjectById(room.memory.spawns).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE],name, {memory: {role: 'defender'}});
+			}
+    },
+    store: function(room){
+        var distribute = _.filter(Game.creeps, (creep) => creep.memory.role == 'distribute' && creep.room.name==room.name);
+        if(distribute.length<2 && Game.getObjectById(room.memory.spawns).spawning == null){
+            var newName='Distribute'+Game.time;
+			var parts= Math.floor(room.energyAvailable/100);
+			if(parts>1){
+				var distBody=[];
+				var counting=0;
+				while(counting<parts){
+					distBody.push(CARRY);
+					distBody.push(MOVE);
+					counting=counting+1;
+					if(counting==25){
+						break;
+					}
+				}
+				Game.getObjectById(room.memory.spawns).spawnCreep(distBody,newName, {memory: {role: 'distribute' , home: room.name}});
+			}
+        }
+    },
+    cleaner: function(room){
+        var cleaners =  _.filter(Game.creeps, (creep) => creep.memory.role == 'cleaner' && creep.room.name==room.name);
+        if(cleaners.length==0 && Game.getObjectById(room.memory.spawns).spawning == null){
+            var newName = 'Cleaner'+Game.time;
+            Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],newName, {memory: {role: 'cleaner'}});
+        }
+    },
+	links: function(room){
+		roleLinkMan.spawn(room);
+		var reciever;
+		for(var output of room.memory.link){
+			if(output.type=='output'){
+				reciever = Game.getObjectById(output.name);
+			}
+		}
+		for(var input of room.memory.link){
+			if(input.type=='input'){
+				var transmitter = Game.getObjectById(input.name);
+				if(transmitter.energy>0 && transmitter.cooldown==0){
+					transmitter.transferEnergy(reciever);
+				}
+			}
+		}
+	},
+	countCreeps: function(room){
+		room.memory.hostile=room.find(FIND_HOSTILE_CREEPS).length;
+		room.memory.harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.room.name==room.name).length;
+		room.memory.engineer = _.filter(Game.creeps, (creep) => creep.memory.role == 'engineer' && creep.room.name==room.name).length;
+		room.memory.upgraders= _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.room.name==room.name).length;
+		room.memory.trucker=_.filter(Game.creeps, (creep) => creep.memory.role == 'trucker' && creep.room.name==room.name).length;
+		room.memory.distribute=_.filter(Game.creeps, (creep) => creep.memory.role == 'distribute' && creep.room.name==room.name).length;
+		room.memory.builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room.name==room.name).length;
+	},
+	minerals: function(room){
+		if(room.memory.mineral==undefined){
+			var m = room.find(FIND_MINERALS);
+			room.memory.mineral=m[0].mineralType;
+			room.memory.mineralid=m[0].id;
+		}
+		// Mineral Harvester
+		// Mineral Trucker
+	},
+    
+}
+module.exports = room_control;
