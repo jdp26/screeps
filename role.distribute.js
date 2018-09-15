@@ -1,4 +1,3 @@
-var jobs = require('jobs');
 var roleDistribute = {
     /** @param {Creep} creep **/
     run: function(creep) {

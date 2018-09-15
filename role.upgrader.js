@@ -1,6 +1,3 @@
-var jobs = require('jobs');
-//var room_control = require('room');
-
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -14,13 +11,16 @@ var roleUpgrader = {
         }
         
 	    if(!creep.memory.upgrader) {
-            jobs.harvest(creep);
+            creep.fill();
         }
         
         if(creep.memory.upgrader){
             if(creep.carry.energy>0){
-            jobs.upgrade(creep);}
-            else{jobs.truck(creep);}
+				creep.upgrade();}
+            else{
+				//if picked up minerals ...
+				creep.truck();
+			}
         }
         
 	},

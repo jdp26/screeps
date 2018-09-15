@@ -1,5 +1,5 @@
 var jobs ={
-    mine: function(creep){
+   /* mine: function(creep){
 		if(creep.memory.source==undefined){
 			var inRoom= _.filter(Game.creeps, (creep) => creep.memory.role == 'vandle' && creep.room.name==room.name).length;
 			var sources = creep.room.find(FIND_SOURCES);
@@ -29,9 +29,9 @@ var jobs ={
 			}}}
 			else{jobs.harvest(creep);}
 		}
-    },
+    },*/
     
-    harvest: function(creep){
+   /* harvest: function(creep){
 		if (creep.memory.harvesttarget==undefined || creep.memory.harvesttarget=='empty'){
 		var structures=creep.room.find(FIND_STRUCTURES);
         var container = _.filter(structures, (structure) => (structure.structureType == STRUCTURE_CONTAINER) && (creep.carryCapacity-_.sum(creep.carry)-1) < _.sum(structure.store));
@@ -100,9 +100,9 @@ var jobs ={
 				else{creep.memory.harvesttarget='empty';}
 			}
 		}
-    },
+    },*/
     
-    build: function(creep){
+    /*build: function(creep){
 		var target = creep.memory.buildTarget;
 		if(target==undefined){
 			var targets = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
@@ -123,9 +123,9 @@ var jobs ={
 			else{creep.memory.buildTarget=undefined;}
 		}       
 
-    },
+    },*/
     
-    repair: function(creep){
+    /*repair: function(creep){
 		var target = creep.memory.repairTarget;
 		if (target=='empty' || target==undefined){
 			var closestDamagedStructure = creep.pos.findClosestByRange(FIND_STRUCTURES, {
@@ -147,15 +147,15 @@ var jobs ={
 			}}
 			else{creep.memory.repairTarget='empty';}
         }
-    },
+    },*/
     
-    upgrade: function(creep){
+  /*  upgrade: function(creep){
         if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
             creep.moveToObject(creep.room.controller, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
-    },
+    },*/
     
-    truck: function(creep){
+    /*truck: function(creep){
 		var truckTarget=creep.memory.truckTarget;
 		var truckType=creep.memory.truckType;
 		if(truckTarget=='empty' || truckTarget==undefined){
@@ -207,9 +207,9 @@ var jobs ={
 			}}
 
 		}        
-    },
+    },*/
     
-    destroy: function(creep){
+   /* destroy: function(creep){
         var sites=creep.room.find(FIND_HOSTILE_STRUCTURES);
         if(sites.length>0){
             if(creep.dismantle(sites[0])==ERR_NOT_IN_RANGE){
@@ -217,7 +217,7 @@ var jobs ={
             }
         }
         else{creep.memory.end=true;}
-    },   
+    },  */ 
 
 };
 

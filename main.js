@@ -35,7 +35,7 @@ module.exports.loop = function () {
 	
 
     for(var r in Memory.rooms){
-        room_control.maintain(r)
+        room_control.maintain(r);
     }
 	
 	for(var name in Game.creeps) {

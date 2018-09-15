@@ -1,4 +1,3 @@
-var jobs = require('jobs');
 var roleTowerMan = {
 	run: function(creep){
 		if(creep.memory.towers==undefined){
@@ -28,7 +27,7 @@ var roleTowerMan = {
 				else{creep.moveToCenter(creep.room.name);}
 			}
 			else{
-				jobs.harvest(creep);
+				creep.fill(creep);
 			}
 		}
 		else{

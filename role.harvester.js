@@ -1,5 +1,3 @@
-var jobs = require('jobs');
-
 var roleHarvester = {
 
     /** @param {Creep} creep **/
@@ -14,7 +12,7 @@ var roleHarvester = {
         }
         
         if(creep.memory.harvest) {
-            jobs.mine(creep);
+            creep.mine();
         }
         else {
         var targets = creep.pos.findInRange(FIND_CONSTRUCTION_SITES, 3);
@@ -28,9 +26,9 @@ var roleHarvester = {
             }
 			else if(targets.length>0 && creep.carry[RESOURCE_ENERGY]>0){
 				creep.memory.buildTarget=targets[0].id;
-				jobs.build(creep);
+				creep.builder();
 			}
-			else{jobs.truck(creep);}			
+			else{creep.truck();}			
         }
 		}
 		else{

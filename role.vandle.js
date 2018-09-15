@@ -1,5 +1,3 @@
-var jobs = require('jobs');
-var roleDefender= require('role.defender');
 var roleVandle ={
     run: function(creep){
         if(creep.memory.count == undefined){
@@ -18,7 +16,7 @@ var roleVandle ={
             }
             else{
                 if(creep.carry.energy>0){
-                    jobs.truck(creep);
+                    creep.truck();
                 }
                 else{
                     creep.moveToObject(creep.room.controller);
@@ -47,7 +45,7 @@ var roleVandle ={
                             Memory.mine[mine]={};
                             Memory.mine[mine].source=creep.room.find(FIND_SOURCES).length;
                         }
-                        jobs.mine(creep);
+                        creep.mine();
                     }
                     else{
                         creep.moveToRoom(mine);
@@ -62,7 +60,7 @@ var roleVandle ={
 					
 					if(container_repair.length > 0){
 						creep.memory.repairTarget=container_repair[0].id;				
-                        jobs.repair(creep);
+                        creep.repairStuff();
 						creep.memory.job='repair';
 						creep.memory.count=10;
                     }
@@ -86,11 +84,11 @@ var roleVandle ={
 					    creep.room.createConstructionSite(creep.pos,STRUCTURE_CONTAINER);
 					}}
 					else if(creep.memory.job=='repair' &&creep.memory.count>0){
-						jobs.repair(creep);
+						creep.repairStuff();
 						creep.memory.count=creep.memory.count-1;	
 					}
 					else if(creep.memory.job=='build' && creep.memory.count>0){
-						jobs.build(creep);
+						creep.builder();
 						creep.memory.count=creep.memory.count-1;
 					}
 					else{

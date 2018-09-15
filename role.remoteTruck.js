@@ -1,5 +1,3 @@
-var jobs = require('jobs');
-var roleDefender = require('role.defender');
 var roleRemoteTruck ={
     run: function(creep){
 		var home=creep.memory.home;
@@ -14,7 +12,7 @@ var roleRemoteTruck ={
             }
             else{
                 if(creep.carry.energy>0){
-                    jobs.truck(creep);
+                    creep.truck();
                 }
                 else{
                     creep.moveToObject(creep.room.controller);
@@ -49,7 +47,7 @@ var roleRemoteTruck ={
 						if(creep.room.storage==undefined){
 					    var container = creep.room.find(FIND_STRUCTURES, {
 						filter: (structure) => { return (structure.structureType == STRUCTURE_CONTAINER && (creep.carryCapacity-creep.carry.energy) < structure.store[RESOURCE_ENERGY] )}});
-						if(container.length>0 && creep.body.length!=5){jobs.harvest(creep);}
+						if(container.length>0 && creep.body.length!=5){creep.fill();}
 						else{creep.moveToCenter();}}
 						else{
 							if(creep.withdraw(creep.room.storage,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE){
@@ -89,7 +87,7 @@ var roleRemoteTruck ={
 										creep.memory.linkcheck=false;
 									}
 								}
-							    else{jobs.truck(creep);}				      
+							    else{creep.truck();}				      
 						}
 						else{
 							creep.memory.linkcheckcount=0;

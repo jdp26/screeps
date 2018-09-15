@@ -1,4 +1,3 @@
-var jobs = require('jobs');
 var roleremBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -14,11 +13,11 @@ var roleremBuilder = {
         }
         
         if(creep.memory.building){
-            jobs.build(creep);
+            creep.builder();
         }
         
         if(!creep.memory.building){
-           jobs.harvest(creep);
+           creep.fill();
         }}
         
     },

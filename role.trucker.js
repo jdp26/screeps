@@ -1,4 +1,3 @@
-var jobs = require('jobs');
 var roleTrucker = {
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -10,11 +9,11 @@ var roleTrucker = {
         }
         
         if(creep.memory.truck){
-            jobs.truck(creep);
+            creep.truck();
         }
         
         if(!creep.memory.truck){
-            jobs.harvest(creep);
+            creep.fill();
         }
     },
     
