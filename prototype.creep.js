@@ -1,5 +1,15 @@
 module.exports = function () {
-	
+	//Count Body Parts
+	Creep.prototype.countWork=
+		function(){
+			var count=0;
+			for(var part of this.body){
+				if(part.type==WORK){
+					count=count+1;
+				}
+			}
+			return count;
+		};
 	//Creep Movement prototypes.
 	Creep.prototype.moveToRoom =
 		function(room){
