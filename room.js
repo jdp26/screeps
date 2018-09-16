@@ -166,7 +166,6 @@ var room_control={
 					}
                     roleVandle.spawn(room,room.memory.mine[i]);
                     roleRemoteTruck.spawn(room,room.memory.mine[i]);
-                    //roleDefender.defend(room,room.memory.mine[i]);
 					roleReserver.spawn(room,room.memory.mine[i]);
                     i=i+1;
                 }
@@ -292,7 +291,9 @@ var room_control={
 						break;
 					}
 				}
-				Game.getObjectById(room.memory.spawns).spawnCreep(distBody,newName, {memory: {role: 'distribute' , home: room.name}});
+				if(Game.getObjectById(room.memory.spawns).spawning == null){
+					Game.getObjectById(room.memory.spawns).spawnCreep(distBody,newName, {memory: {role: 'distribute' , home: room.name}});
+				}
 			}
         }
     },
@@ -300,7 +301,9 @@ var room_control={
         var cleaners =  _.filter(Game.creeps, (creep) => creep.memory.role == 'cleaner' && creep.room.name==room.name);
         if(cleaners.length==0 && Game.getObjectById(room.memory.spawns).spawning == null){
             var newName = 'Cleaner'+Game.time;
-            Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],newName, {memory: {role: 'cleaner'}});
+			if(Game.getObjectById(room.memory.spawns).spawning == null){
+				Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],newName, {memory: {role: 'cleaner'}});
+			}
         }
     },
 	links: function(room){
@@ -336,8 +339,6 @@ var room_control={
 			room.memory.mineral=m[0].mineralType;
 			room.memory.mineralid=m[0].id;
 		}
-		// Mineral Harvester
-		// Mineral Trucker
 	},
     
 }
