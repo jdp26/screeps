@@ -7,7 +7,7 @@ var roleHarvester = {
             creep.memory.harvest=true;
         }
         
-        if(_.sum(creep.carry) == creep.carryCapacity && creep.memory.harvest){
+        if(_.sum(creep.carry)>(creep.carryCapacity-creep.countWork()) && creep.memory.harvest){
             creep.memory.harvest=false;
         }
         

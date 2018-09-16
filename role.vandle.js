@@ -31,7 +31,7 @@ var roleVandle ={
 				creep.memory.hostile=true;
             }
 		
-        if(creep.memory.hostile==undefined || creep.memory.hostile==false){if(creep.memory.building && creep.carry.energy==creep.carryCapacity){
+        if(creep.memory.hostile==undefined || creep.memory.hostile==false){if(creep.memory.building && creep.carry.energy>(creep.carryCapacity-creep.countWork())){
                     creep.memory.building = false;
                 }
                 if(!creep.memory.building && creep.carry.energy==0){
