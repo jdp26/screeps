@@ -63,8 +63,10 @@ module.exports = function () {
 			if(this.fatigue==0){
 				if(this.memory._move!=undefined){
 					if(this.memory.previous_pos!=undefined && this.memory.previous_pos.x==this.pos.x && this.memory.previous_pos.x==this.pos.x){
-						delete this.memory._move;
-						return this.moveTo(new RoomPosition(25,25, this.room.name));
+						if(!this.pos.isNearTo(25,25,2)){
+							delete this.memory._move;
+							return this.moveTo(new RoomPosition(25,25, this.room.name));
+						}
 					}
 					else if(this.memory._move.dest.x==25 && this.memory._move.dest.y==25 && this.memory._move.room==this.room.name){
 						this.memory.previous_pos=this.pos;
