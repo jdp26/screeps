@@ -1,10 +1,13 @@
 var roleDistribute = {
     /** @param {Creep} creep **/
     run: function(creep) {
-		if(creep.ticksticksToLive<20){
+		if(creep.ticksticksToLive<30){
 			if(_.sum(creep.carry)>0){
 				console.log('Distributor near death');
 				creep.truck();
+			}
+			else{
+				creep.suicide();
 			}
 		}
 		else{
