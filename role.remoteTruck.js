@@ -101,18 +101,11 @@ var roleRemoteTruck ={
     spawn: function(room,mineRoom){
 		var num;
         var skip =false;
-        for(var v in Game.creeps){
-            var van=Game.creeps[v];
-            if(van.memory.hostile == true && van.memory.mine==mineRoom && van.memory.role == 'remoteTruck'){skip=true; console.log('Skip Truckers' +mineRoom);}
-        }
+		if(Memory.hostile[mineRoom].evacuate==true){skip=true;}
+		
         var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteTruck' && creep.memory.mine==mineRoom);
         var remoteMiners= _.filter(Game.creeps, (creep) => creep.memory.role == 'vandle' && creep.memory.mine==mineRoom);
-        if(harvesters.length==1){
-            for(var v in Game.creeps){
-            var van=Game.creeps[v];
-            if(van.memory.hostile == undefined && van.memory.role == 'remoteTruck' ){skip=true;}
-        }
-        }
+		
         if(remoteMiners.length<1 || remoteMiners.length == undefined){
             skip=true;
         }
@@ -125,8 +118,7 @@ var roleRemoteTruck ={
             else if (extensions<10){Body=[CARRY,CARRY,CARRY,CARRY,MOVE,MOVE];num=4;energyNeeded=300;}
             else if (extensions<15){Body=[CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];num=3;energyNeeded=600;}
             else {Body=[CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];num=3;energyNeeded=1000;}
-            
-            if(harvesters.length==0){Body=[TOUGH,TOUGH,TOUGH,TOUGH,MOVE];}
+
             if(harvesters.length<num && room.energyAvailable>energyNeeded-1){
                 Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'remoteTruck', home: room.name, mine: mineRoom}})
 

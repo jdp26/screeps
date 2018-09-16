@@ -110,8 +110,7 @@ var roleVandle ={
         var skip =false;
 		if(Memory.hostile[mineRoom].evacuate==true){skip=true;}
         if(skip==false)
-        {
-    	    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'vandle' && creep.memory.mine== mineRoom);
+        {  	var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'vandle' && creep.memory.mine== mineRoom);
             //console.log('Vandles(?): ' + harvesters.length);
             var newName='Vandle'+Game.time;
             var Body;
