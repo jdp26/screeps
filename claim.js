@@ -11,9 +11,9 @@ var claim={
 		}
 		
 		if(Game.getObjectById(room.memory.spawns).spawning == null){
-		roleDefender.defend(room,claimRoom);
+		roleDefender.spawn(room.name,claimRoom);
 		var claimers=_.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
-		if(claimers.length<1 && Game.rooms[claimRoom].controller.owner==undefined){
+		if(claimers.length<1 && (Game.rooms[claimRoom]==undefined || Game.rooms[claimRoom].controller.owner==undefined)){
 			claim.spawn(room,claimRoom);
 		}
 		roleremBuilder.spawn(4,room,claimRoom);
