@@ -272,7 +272,8 @@ var room_control={
     hostile: function(room){         
             var name='Defender' +Game.time;
 			if(Game.getObjectById(room.memory.spawns).spawning == null){
-				Game.getObjectById(room.memory.spawns).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE],name, {memory: {role: 'defender'}});
+				if(room.energyAvailable<380)Game.getObjectById(room.memory.spawns).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE],name, {memory: {role: 'defender'}});
+				else{Game.getObjectById(room.memory.spawns).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE,MOVE,MOVE],name, {memory: {role: 'defender'}});}
 			}
     },
     store: function(room){

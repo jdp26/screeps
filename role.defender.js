@@ -45,13 +45,14 @@ var roleDefender ={
                 Body=[TOUGH,ATTACK,MOVE,MOVE];
                 energyReq=190;
             }
-            else if(extensions<2){
+            else if(extensions<12){
 				Body=[TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE,MOVE,MOVE];
 				energyReq=380;
 			}
             else {
-				Body = [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE];
-				energyReq=640;
+				//12 extensions
+				Body = [TOUGH,TOUGH,TOUGH,TOUGH,MOVE,MOVE,ATTACK,ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
+				energyReq=890;
 			}}
             if(defenders.length<3 && room.energyAvailable>(energyReq-1)){
                 var newName= 'RemoteDefend' + Game.time;
