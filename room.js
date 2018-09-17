@@ -325,13 +325,14 @@ var room_control={
 	},
 	countCreeps: function(room){
 		room.memory.hostile=room.find(FIND_HOSTILE_CREEPS).length;
-		room.memory.harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester' && creep.room.name==room.name).length;
-		room.memory.engineer = _.filter(Game.creeps, (creep) => creep.memory.role == 'engineer' && creep.room.name==room.name).length;
-		room.memory.upgraders= _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader' && creep.room.name==room.name).length;
-		room.memory.trucker=_.filter(Game.creeps, (creep) => creep.memory.role == 'trucker' && creep.room.name==room.name).length;
-		room.memory.distribute=_.filter(Game.creeps, (creep) => creep.memory.role == 'distribute' && creep.room.name==room.name).length;
-		room.memory.builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder' && creep.room.name==room.name).length;
-		room.memory.mineralHarvest = _.filter(Game.creeps, (creep) => creep.memory.role == 'mineralharvester' && creep.room.name==room.name).length;
+		var creepsInRoom= _.filter(Game.creeps, (creep) => creep.room.name==room.name);
+		room.memory.harvesters = _.filter(creepsInRoom, (creep) => creep.memory.role == 'harvester').length;
+		room.memory.engineer = _.filter(creepsInRoom, (creep) => creep.memory.role == 'engineer').length;
+		room.memory.upgraders= _.filter(creepsInRoom, (creep) => creep.memory.role == 'upgrader').length;
+		room.memory.trucker=_.filter(creepsInRoom, (creep) => creep.memory.role == 'trucker').length;
+		room.memory.distribute=_.filter(creepsInRoom, (creep) => creep.memory.role == 'distribute').length;
+		room.memory.builders = _.filter(creepsInRoom, (creep) => creep.memory.role == 'builder').length;
+		room.memory.mineralHarvest = _.filter(creepsInRoom, (creep) => creep.memory.role == 'mineralharvester').length;
 	},
 	minerals: function(room){
 		if(room.memory.mineral==undefined){
