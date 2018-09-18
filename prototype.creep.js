@@ -196,9 +196,12 @@ module.exports = function () {
 			else{
 					var source = Game.getObjectById(this.memory.source); 
 					if(source.energy == undefined && this.memory.extractor == undefined){
-						this.memory.extractor=this.room.find(FIND_STRUCTURES, {filter: s => s.structureType==STRUCTURE_EXTRACTOR})[0].id;	
+						var extract=this.room.find(FIND_STRUCTURES, {filter: s => s.structureType==STRUCTURE_EXTRACTOR});
+						if(extract.length>0){
+							this.memory.extractor=extract[0].id;
+						}
 					}
-					if(source.energy!=undefined || (Game.getObjectById(this.memory.extractor).cooldown==0 && source.mineralAmount>0)){
+					if(source.energy!=undefined || (Game.getObjectById(this.memory.extractor) != null && Game.getObjectById(this.memory.extractor).cooldown==0 && source.mineralAmount>0)){
 						if(this.harvest(source) == ERR_NOT_IN_RANGE) {
 							this.moveToObject(source, {visualizePathStyle: {stroke: '#ffaa00'}});
 						}
