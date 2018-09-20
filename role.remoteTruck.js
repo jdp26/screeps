@@ -119,9 +119,9 @@ var roleRemoteTruck ={
             else if (extensions<15){Body=[CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];num=3;energyNeeded=600;}
             else {Body=[CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];num=3;energyNeeded=1000;}
 
-			if(Memory.mine[mineRoom].source==1){
-				num=num/2;
-			}
+	    if(Memory.mine[mineRoom]!= undefined && Memory.mine[mineRoom].source==1){
+	        num=num/2;
+	    }
 			
             if(harvesters.length<num && room.energyAvailable>energyNeeded-1){
                 Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'remoteTruck', home: room.name, mine: mineRoom}})
