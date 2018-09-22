@@ -5,7 +5,7 @@ var user ={
 		var id;
 		var gameOrders=Game.market.getAllOrders({type:ORDER_BUY,resourceType:resource})
 		for(var  order of gameOrders){
-			if(order.price>highestprice){
+			if(order.price>highestprice & order.remainingAmount>0){
 				highestprice=order.price;
 				remaining=order.amount;
 				id=order.id;
