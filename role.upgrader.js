@@ -47,6 +47,21 @@ var roleUpgrader = {
 		    Body=[WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
 			energyReq=1000;
 		}
+		
+		if(room.controller.level>4 && room.energyAvailable/room.energyCapacityAvailable>0.75){
+			Body=[];
+			var parts=Math.floor(room.energyAvailable/250);
+			var count =0;
+			while(count<parts){
+				Body.push(WORK);
+				Body.push(MOVE);
+				Body.push(CARRY);
+				Body.push(MOVE);
+				count=count+1;
+				if(Body.length>47){break;}
+			}
+		}
+		
         if(upgraders==0){
             Body=[WORK,CARRY,MOVE,MOVE];
 			energyReq=250;
