@@ -27,11 +27,22 @@ var roleCleaner={
         
         if(!creep.memory.truck){
             var dropped = creep.room.find(FIND_DROPPED_RESOURCES);
-            if(dropped.length>0){
+			var tombs = creep.room.find(FIND_TOMBSTONES, {filter: (tomb) => _.sum(tomb.store)>0});
+			
+			if(dropped.length>0){
                 if(creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE){
                     creep.moveToObject(dropped[0]);
                 }
             }
+			else if(tombs.length>0){
+				for(var resourceType in tombs[0].store){
+					if(_.sum(creep.carry)<creep.carryCapacity){
+						if(creep.withdraw(tombs[0],resourceType)==ERR_NOT_IN_RANGE){
+							creep.moveToObject(tombs[0]);
+						}
+					}
+				}
+			}
 			else{
 				creep.memory.truck=true;
 			}
