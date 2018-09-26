@@ -3,7 +3,7 @@ var roleDistribute = {
     run: function(creep) {
 		if(creep.ticksToLive<30){
 			if(_.sum(creep.carry)>0){
-				console.log('Distributor near death');
+			//	console.log('Distributor near death');
 				creep.truck();
 			}
 			else{
@@ -51,8 +51,13 @@ var roleDistribute = {
 				}
 				else{				
 					var tar = Game.getObjectById(creep.memory.target);
-					if(creep.transfer(tar, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
-						creep.moveToObject(tar, {visualizePathStyle: {stroke: '#ffffff'}});
+					if(tar.energy !=tar.energyCapacity){
+						if(creep.transfer(tar, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+							creep.moveToObject(tar, {visualizePathStyle: {stroke: '#ffffff'}});
+						}
+						else{
+							delete creep.memory.target;
+						}
 					}
 					else{
 						delete creep.memory.target;

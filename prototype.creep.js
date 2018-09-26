@@ -260,19 +260,21 @@ module.exports = function () {
 				}
 				else{
 					if(target != null){
-					if(this.memory.role=='trucker'){
+					if(target.structureType!= undefined && target.structureType == STRUCTURE_CONTAINER){
 					for(var resourceType in target.store){					
 							if(_.sum(this.carry)<this.carryCapacity && target.store[resourceType]>0){
 							if(this.withdraw(target,resourceType)==ERR_NOT_IN_RANGE){
 							this.moveToObject(target);
 							break;
 							}}
-					}}
-					else{
-						if(this.withdraw(target,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE){
-							this.moveToObject(target);
-						}
 					}
+					}
+					else{
+					    if(this.withdraw(target,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE){
+					        this.moveToObject(target);
+					    }
+					}
+
 					
 					if(_.sum(target.store)==0){
 						this.memory.harvesttarget='empty';

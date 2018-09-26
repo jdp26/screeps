@@ -48,9 +48,11 @@ var roleUpgrader = {
 			energyReq=1000;
 		}
 		
-		if(room.controller.level>4 && room.energyAvailable/room.energyCapacityAvailable>0.75){
+		if(room.controller.level>4){
+		    num=3;
 			Body=[];
 			var parts=Math.floor(room.energyAvailable/250);
+			energyReq=Math.min(250*parts,250*3000);
 			var count =0;
 			while(count<parts){
 				Body.push(WORK);

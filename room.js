@@ -78,6 +78,7 @@ var room_control={
         }
     },
     creepCreate: function(room,container_count,tower_count){
+        if(room != undefined && room.memory.spawns.length>0){
 		if(Game.getObjectById(room.memory.spawns).spawning == null){
         roleHarvester.spawn(room.memory.sources.length,room);
         if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
@@ -177,7 +178,8 @@ var room_control={
                 pass=pass+1;
             }
         }
-		}  
+		}
+        }
     },  
 
     
@@ -326,6 +328,7 @@ var room_control={
 	},
 	countCreeps: function(room){
 		room.memory.hostile=room.find(FIND_HOSTILE_CREEPS).length;
+		if(Math.floor(Game.time/(2*CREEP_SPAWN_TIME))*2*CREEP_SPAWN_TIME==Game.time){
 		var creepsInRoom= _.filter(Game.creeps, (creep) => creep.room.name==room.name);
 		room.memory.harvesters = _.filter(creepsInRoom, (creep) => creep.memory.role == 'harvester').length;
 		room.memory.engineer = _.filter(creepsInRoom, (creep) => creep.memory.role == 'engineer').length;
@@ -333,7 +336,7 @@ var room_control={
 		room.memory.trucker=_.filter(creepsInRoom, (creep) => creep.memory.role == 'trucker').length;
 		room.memory.distribute=_.filter(creepsInRoom, (creep) => creep.memory.role == 'distribute').length;
 		room.memory.builders = _.filter(creepsInRoom, (creep) => creep.memory.role == 'builder').length;
-		room.memory.mineralHarvest = _.filter(creepsInRoom, (creep) => creep.memory.role == 'mineralharvester').length;
+		room.memory.mineralHarvest = _.filter(creepsInRoom, (creep) => creep.memory.role == 'mineralharvester').length;}
 	},
 	minerals: function(room){
 		if(room.memory.mineral==undefined){
