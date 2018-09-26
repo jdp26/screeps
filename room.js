@@ -177,6 +177,12 @@ var room_control={
                 roleSpook.spawn(room,room.memory.spook[pass]);
                 pass=pass+1;
             }
+			
+			if(room.controller.level>6 && room.terminal!=null && room.terminal!=undefined){
+				if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
+					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id);
+				}
+			}
         }
 		}
         }
@@ -336,7 +342,11 @@ var room_control={
 		room.memory.trucker=_.filter(creepsInRoom, (creep) => creep.memory.role == 'trucker').length;
 		room.memory.distribute=_.filter(creepsInRoom, (creep) => creep.memory.role == 'distribute').length;
 		room.memory.builders = _.filter(creepsInRoom, (creep) => creep.memory.role == 'builder').length;
-		room.memory.mineralHarvest = _.filter(creepsInRoom, (creep) => creep.memory.role == 'mineralharvester').length;}
+		room.memory.mineralHarvest = _.filter(creepsInRoom, (creep) => creep.memory.role == 'mineralharvester').length;
+		if(room.memory.mineral != undefined){
+			room.memory.mineralGofer = _.filter(creepsInRoom, (creep) => creep.memory.role == 'gofer' && creep.memory.resource == room.memory.mineral).length;
+		}
+		}
 	},
 	minerals: function(room){
 		if(room.memory.mineral==undefined){
