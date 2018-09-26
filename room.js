@@ -41,6 +41,15 @@ var room_control={
 			}
 			//Normall Code
 			var structures = room.find(FIND_STRUCTURES);
+			if(room.controller.level>6 && Math.floor(Game.ticks/100)*100==Game.ticks){
+				spawns=_.filter(structures, (structure) => structure.structureType==STRUCTURE_SPAWN);
+				if(spawns.length>room.memory.spawns.length){
+					room.memory.spawns=[];
+					for (var s in spawns){
+						room.memory.spawns.push(s.id);
+					}
+				}
+			}
 			room_control.countCreeps(room);			
 			room.memory.extensions=_.filter(structures,(structure) => structure.structureType == STRUCTURE_EXTENSION).length;
 			room.memory.road_count=_.filter(structures,(structure) => structure.structureType == STRUCTURE_ROAD).length; 
