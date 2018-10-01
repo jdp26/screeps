@@ -84,6 +84,9 @@ var room_control={
 					room.createConstructionSite(Game.getObjectById(room.memory.mineralid).pos,STRUCTURE_EXTRACTOR);
 				}
 			}
+			else if(extractor.length==1 && (room.memory.extractor==undefined || room.memory.extractor==false)){
+			    room.memory.extractor=true;
+			}
         }
     },
     creepCreate: function(room,container_count,tower_count){
@@ -124,7 +127,7 @@ var room_control={
 							if(_.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook==room.memory.reserve[k]).length==0){
 							roleSpook.spawn(room,room.memory.reserve[k],spawn);}
 						}
-						k=k+1;
+						k=k+1;		
 					}
 				}
 				if(room.memory.mine.length>0){
@@ -193,12 +196,33 @@ var room_control={
 					if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
 						gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id,spawn);
 					}
+                    roleVandle.spawn(room,room.memory.mine[i]);
+                    roleRemoteTruck.spawn(room,room.memory.mine[i]);
+					roleReserver.spawn(room,room.memory.mine[i]);
+                    i=i+1;
+                }
+            }
+            var spk=room.memory.spook.length;
+            var pass=0;
+            while(pass<spk){
+                roleSpook.spawn(room,room.memory.spook[pass]);
+                pass=pass+1;
+            }
+			
+			if(room.controller.level>5 && room.terminal!=null && room.terminal!=undefined){
+				if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
+					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id);
 				}
 			}
+			
+			if(room.controller.level>5 && room.memory.extractor==true){
+				roleHarvester.Mineralspawn(room);
 			}
-		}
-		}
-    },  
+			
+        }
+
+    }
+	}},  
 
     
     tower: function(room,t){      
