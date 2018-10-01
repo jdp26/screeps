@@ -75,6 +75,9 @@ var room_control={
 					room.createConstructionSite(Game.getObjectById(room.memory.mineralid).pos,STRUCTURE_EXTRACTOR);
 				}
 			}
+			else if(extractor.length==1 && (room.memory.extractor==undefined || room.memory.extractor==false)){
+			    room.memory.extractor=true;
+			}
         }
     },
     creepCreate: function(room,container_count,tower_count){
@@ -89,10 +92,7 @@ var room_control={
 		 }
 		if(room.controller.level>7){up=1;}
         if(room.memory.harvesters>0){roleUpgrader.spawn(up,room);}
-        if(room.controller.level>1){
-			if(room.controller.level>5){
-				roleHarvester.Mineralspawn(room);
-			}
+        if(room.controller.level>1 && room.memory.harvesters>(room.memory.sources.length-1)){
             if(room.memory.spawnkill != undefined){
                 var spawn_killers=_.filter(Game.creeps, (creep) => creep.memory.role == 'SKill').length;
                 if(spawn_killers==0){spawnkill.spawn(room,room.memory.spawnkill);}
@@ -178,11 +178,16 @@ var room_control={
                 pass=pass+1;
             }
 			
-			if(room.controller.level>6 && room.terminal!=null && room.terminal!=undefined){
+			if(room.controller.level>5 && room.terminal!=null && room.terminal!=undefined){
 				if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
 					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id);
 				}
 			}
+			
+			if(room.controller.level>5 && room.memory.extractor==true){
+				roleHarvester.Mineralspawn(room);
+			}
+			
         }
 		}
         }

@@ -39,6 +39,19 @@ var gofer = {
 			creep.memory.target=target;
 		}
 		}
+	},
+	
+	spawnMini: function(roomName,resource,source,target){
+	    var room=Game.rooms[roomName]
+		var name = 'Gofer'+Game.time;
+		if(room.energyAvailable>400){
+		if(Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,MOVE],name,{memory: {role: 'gofer'}})==0){
+			var creep =Game.creeps[name];
+			creep.memory.resource=resource;
+			creep.memory.source=source;
+			creep.memory.target=target;
+		}
+		}
 	}
 };
 

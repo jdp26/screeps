@@ -256,6 +256,7 @@ module.exports = function () {
 						this.moveToObject(target, {visualizePathStyle: {stroke: '#ffaa00'}});
 						this.memory.harvesttarget=target.id;
 					}
+					else if (target.energy==0 || target.energy ==null){this.memory.harvesttarget='empty';}
 					else if (_.sum(this.carry==this.carryCapacity)){this.memory.harvesttarget='empty';}
 				}
 				else{

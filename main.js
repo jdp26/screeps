@@ -36,7 +36,7 @@ module.exports.loop = function () {
 
     for(var r in Memory.rooms){
         var room=Game.rooms[r];
-        if(room!= undefined){
+        if(room!= undefined && room.memory.spawns.length>0){
             room_control.maintain(r);
         }
     }
