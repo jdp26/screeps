@@ -88,113 +88,116 @@ var room_control={
     },
     creepCreate: function(room,container_count,tower_count){
         if(room != undefined && room.memory.spawns.length>0){
-		if(Game.getObjectById(room.memory.spawns).spawning == null){
-        roleHarvester.spawn(room.memory.sources.length,room);
-        if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
-		else{
-		    //MOD TEMPORARY
-		    //var up = 4 + room.memory.mine.length;
-		    var up =4;
-		 }
-		if(room.controller.level>7){up=1;}
-        if(room.memory.harvesters>0){roleUpgrader.spawn(up,room);}
-        if(room.controller.level>1){
-			if(room.controller.level>5){
-				roleHarvester.Mineralspawn(room);
-			}
-            if(room.memory.spawnkill != undefined){
-                var spawn_killers=_.filter(Game.creeps, (creep) => creep.memory.role == 'SKill').length;
-                if(spawn_killers==0){spawnkill.spawn(room,room.memory.spawnkill);}
-            }
-			roleTrucker.spawn(container_count,room);
-            var sites=room.find(FIND_CONSTRUCTION_SITES);
-            roleBuilder.spawn(2*Math.min(sites.length,2),room);			
-            if((tower_count==0 || tower_count==undefined) && (room.memory.road_count>0 || room.memory.container_count>0)){roleEngineer.spawn(2,room,room.name);}
-            if(room.memory.reserve==undefined){
-                room.memory.reserve=[];
-            }
-            else if(room.memory.reserve.length>0){
-                var k=0;
-                while(k<room.memory.reserve.length){
-                    if(Game.rooms[room.memory.reserve[k]]!=undefined){
-                    roleReserver.spawn(room,room.memory.reserve[k]);}
-                    else{
-                        if(_.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook==room.memory.reserve[k]).length==0){
-                        roleSpook.spawn(room,room.memory.reserve[k]);}
-                    }
-                    k=k+1;
-                }
-            }
-            if(room.memory.mine.length>0){
-                var i=0;
-                while(i<room.memory.mine.length){
-					if(Memory.hostile[room.memory.mine[i]]==undefined){
-						Memory.hostile[room.memory.mine[i]]={};
+		for (var spawnID in room.memory.spawns){
+			var spawn=Game.getObjectById(spawnID);
+			if(spawn.spawning == null){
+			roleHarvester.spawn(room.memory.sources.length,room);
+			if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
+			else{
+				//MOD TEMPORARY
+				//var up = 4 + room.memory.mine.length;
+				var up =4;
+			 }
+			if(room.controller.level>7){up=1;}
+			if(room.memory.harvesters>0){roleUpgrader.spawn(up,room,spawn);}
+			if(room.controller.level>1){
+				if(room.controller.level>5){
+					roleHarvester.Mineralspawn(room,spawn);
+				}
+				if(room.memory.spawnkill != undefined){
+					var spawn_killers=_.filter(Game.creeps, (creep) => creep.memory.role == 'SKill').length;
+					if(spawn_killers==0){spawnkill.spawn(room,room.memory.spawnkill,spawn);}
+				}
+				roleTrucker.spawn(container_count,room,spawn);
+				var sites=room.find(FIND_CONSTRUCTION_SITES);
+				roleBuilder.spawn(2*Math.min(sites.length,2),room,spawn);			
+				if((tower_count==0 || tower_count==undefined) && (room.memory.road_count>0 || room.memory.container_count>0)){roleEngineer.spawn(2,room,room.name,spawn);}
+				if(room.memory.reserve==undefined){
+					room.memory.reserve=[];
+				}
+				else if(room.memory.reserve.length>0){
+					var k=0;
+					while(k<room.memory.reserve.length){
+						if(Game.rooms[room.memory.reserve[k]]!=undefined){
+						roleReserver.spawn(room,room.memory.reserve[k],spawn);}
+						else{
+							if(_.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook==room.memory.reserve[k]).length==0){
+							roleSpook.spawn(room,room.memory.reserve[k],spawn);}
+						}
+						k=k+1;
 					}
-					else{
-						if(Game.rooms[room.memory.mine[i]] != undefined){
-						var hostile_list=Game.rooms[room.memory.mine[i]].find(FIND_HOSTILE_CREEPS);
-						Memory.hostile[room.memory.mine[i]].hostileCount=hostile_list.length;
-						if(hostile_list.length>0){
-							roleDefender.spawn(room.name,room.memory.mine[i]);
-							var host=false;
-							for(var hostile of hostile_list){
-							var damage=false;
-							var heal=false;
-								for(var part of hostile.body){
-									if(part.type==ATTACK || part.type == RANGED_ATTACK){
-										damageParts=true;
-										if(part.hits>0){
-											host=true;
+				}
+				if(room.memory.mine.length>0){
+					var i=0;
+					while(i<room.memory.mine.length){
+						if(Memory.hostile[room.memory.mine[i]]==undefined){
+							Memory.hostile[room.memory.mine[i]]={};
+						}
+						else{
+							if(Game.rooms[room.memory.mine[i]] != undefined){
+							var hostile_list=Game.rooms[room.memory.mine[i]].find(FIND_HOSTILE_CREEPS);
+							Memory.hostile[room.memory.mine[i]].hostileCount=hostile_list.length;
+							if(hostile_list.length>0){
+								roleDefender.spawn(room.name,room.memory.mine[i],spawn);
+								var host=false;
+								for(var hostile of hostile_list){
+								var damage=false;
+								var heal=false;
+									for(var part of hostile.body){
+										if(part.type==ATTACK || part.type == RANGED_ATTACK){
+											damageParts=true;
+											if(part.hits>0){
+												host=true;
+											}
 										}
+										else if(part.type=='HEAL' && part.hits>0){
+											heal=true;
+										}			
 									}
-									else if(part.type=='HEAL' && part.hits>0){
-										heal=true;
-									}			
+									if(host==false && heal==true && damageParts==true){
+										host=true;
+									}
 								}
-								if(host==false && heal==true && damageParts==true){
-									host=true;
+								if(host==true){
+									Memory.hostile[room.memory.mine[i]].evacuate=true;
+								}
+								if(host==false){
+									Memory.hostile[room.memory.mine[i]].evacuate=false;
+									Memory.hostile[room.memory.mine[i]].nonhostile=true;
 								}
 							}
-							if(host==true){
-								Memory.hostile[room.memory.mine[i]].evacuate=true;
-							}
-							if(host==false){
+							else{
 								Memory.hostile[room.memory.mine[i]].evacuate=false;
-								Memory.hostile[room.memory.mine[i]].nonhostile=true;
+								Memory.hostile[room.memory.mine[i]].nonhostile=false;
 							}
 						}
 						else{
-							Memory.hostile[room.memory.mine[i]].evacuate=false;
-							Memory.hostile[room.memory.mine[i]].nonhostile=false;
+								Memory.hostile[room.memory.mine[i]].evacuate=false;
+								Memory.hostile[room.memory.mine[i]].nonhostile=false;
+							}
 						}
+						roleVandle.spawn(room,room.memory.mine[i],spawn);
+						roleRemoteTruck.spawn(room,room.memory.mine[i],spawn);
+						roleReserver.spawn(room,room.memory.mine[i],spawn);
+						i=i+1;
 					}
-					else{
-							Memory.hostile[room.memory.mine[i]].evacuate=false;
-							Memory.hostile[room.memory.mine[i]].nonhostile=false;
-						}
+				}
+				var spk=room.memory.spook.length;
+				var pass=0;
+				while(pass<spk){
+					roleSpook.spawn(room,room.memory.spook[pass],spawn);
+					pass=pass+1;
+				}
+				
+				if(room.controller.level>6 && room.terminal!=null && room.terminal!=undefined){
+					if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
+						gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id,spawn);
 					}
-                    roleVandle.spawn(room,room.memory.mine[i]);
-                    roleRemoteTruck.spawn(room,room.memory.mine[i]);
-					roleReserver.spawn(room,room.memory.mine[i]);
-                    i=i+1;
-                }
-            }
-            var spk=room.memory.spook.length;
-            var pass=0;
-            while(pass<spk){
-                roleSpook.spawn(room,room.memory.spook[pass]);
-                pass=pass+1;
-            }
-			
-			if(room.controller.level>6 && room.terminal!=null && room.terminal!=undefined){
-				if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
-					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id);
 				}
 			}
-        }
+			}
 		}
-        }
+		}
     },  
 
     

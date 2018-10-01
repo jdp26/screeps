@@ -20,13 +20,13 @@ var roleEngineer = {
         }}
     },
     
-    spawn: function(num,room,targetroom){
+    spawn: function(num,room,targetroom,spawn){
         var engineers = room.memory.engineer;
         //console.log('Engineers: ' + engineers);
         if(engineers<num){
             var newName='Engineer'+Game.time;
 			if(room.energyAvailable>200){
-				Game.getObjectById(room.memory.spawns).spawnCreep([WORK,CARRY,MOVE], newName, {memory: {role: 'engineer', workroom: targetroom}});
+				spawn.spawnCreep([WORK,CARRY,MOVE], newName, {memory: {role: 'engineer', workroom: targetroom}});
 			}
 
         }

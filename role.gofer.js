@@ -28,7 +28,7 @@ var gofer = {
 			else{creep.suicide();}
 		}
 	},
-	spawn: function(roomName,resource,source,target){
+	spawn: function(roomName,resource,source,target,spawn){
 	    var room=Game.rooms[roomName]
 		var name = 'Gofer'+Game.time;
 		if(room.energyAvailable>400){

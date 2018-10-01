@@ -30,7 +30,7 @@ var roleDefender ={
 				}
         }
     },
-	spawn: function(roomname,mineRoom){
+	spawn: function(roomname,mineRoom,spawn){
 		var room= Game.rooms[roomname];
 			var defenders = _.filter(Game.creeps, (creep) => creep.memory.role == 'rdefend' && creep.memory.mine==mineRoom);
             var Body;
@@ -56,7 +56,7 @@ var roleDefender ={
 			}}
             if(defenders.length<3 && room.energyAvailable>(energyReq-1)){
                 var newName= 'RemoteDefend' + Game.time;
-                Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'rdefend', mine: mineRoom}})
+                spawn.spawnCreep(Body, newName, {memory: {role: 'rdefend', mine: mineRoom}})
             }
 	}
 };

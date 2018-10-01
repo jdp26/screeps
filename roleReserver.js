@@ -14,7 +14,7 @@ var roleReserver ={
 		}
 	},
 	
-	spawn: function(room,reserveRoom){
+	spawn: function(room,reserveRoom,spawn){
 		var extensions = room.memory.extensions;
 		if(extensions>19){
 		var Reservers=_.filter(Game.creeps, (creep) => creep.memory.role == 'reserve' && creep.memory.reserve==reserveRoom).length;
@@ -22,7 +22,7 @@ var roleReserver ={
 			if(Game.rooms[reserveRoom]!= undefined){
 				if(Game.rooms[reserveRoom].controller.reservation == undefined || Game.rooms[reserveRoom].controller.reservation.ticksToEnd<2500){
 					var name = 'Reserve'+Game.time;
-					Game.getObjectById(room.memory.spawns).spawnCreep([CLAIM,CLAIM,MOVE,MOVE],name,{memory: {role: 'reserve', reserve: reserveRoom}})
+					spawn.spawnCreep([CLAIM,CLAIM,MOVE,MOVE],name,{memory: {role: 'reserve', reserve: reserveRoom}})
 				}
 			}
 		}}

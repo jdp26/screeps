@@ -25,7 +25,7 @@ var roleUpgrader = {
         
 	},
 	
-	spawn: function(num,room){
+	spawn: function(num,room,spawn){
 	    var upgraders = room.memory.upgraders;
         //console.log('Upgraders: ' + upgraders);
         var Body;
@@ -70,7 +70,7 @@ var roleUpgrader = {
         }
         if(upgraders<num && room.energyAvailable>(energyReq-1)){
 	        var newName='Upgrader'+Game.time;
-             Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'upgrader'}});           
+             spawn.spawnCreep(Body, newName, {memory: {role: 'upgrader'}});           
         }
 	}
 };

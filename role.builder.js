@@ -19,7 +19,7 @@ var roleBuilder = {
         
     },
     
-    spawn: function(num,room){      
+    spawn: function(num,room,spawn){      
 		var extensions = room.memory.extensions;
         if(extensions<5){
             Body=[WORK,CARRY,MOVE];            
@@ -29,7 +29,7 @@ var roleBuilder = {
         }
         if(room.memory.builders<num){
             var newName='Builder'+Game.time;
-            Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'builder'}});            
+            spawn.spawnCreep(Body, newName, {memory: {role: 'builder'}});            
         }
     }
 };

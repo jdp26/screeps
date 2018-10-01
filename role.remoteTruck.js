@@ -98,7 +98,7 @@ var roleRemoteTruck ={
         }
      
     },
-    spawn: function(room,mineRoom){
+    spawn: function(room,mineRoom,spawn){
 		var num;
         var skip =false;
 		if(Memory.hostile[mineRoom].evacuate==true){skip=true;}
@@ -124,7 +124,7 @@ var roleRemoteTruck ={
 			}
 			
             if(harvesters.length<num && room.energyAvailable>energyNeeded-1){
-                Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'remoteTruck', home: room.name, mine: mineRoom}})
+                spawn.spawnCreep(Body, newName, {memory: {role: 'remoteTruck', home: room.name, mine: mineRoom}})
 
             }
         }

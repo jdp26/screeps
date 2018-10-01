@@ -38,11 +38,11 @@ var roleSpook={
         }
     },
     
-    spawn: function(room,spookRooms){
+    spawn: function(room,spookRooms,spawn){
         var spookers= _.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook[0]==spookRooms[0]);
         if(spookers.length<2){
             var name='Spk'+Game.time;
-            Game.getObjectById(room.memory.spawns).spawnCreep([MOVE],name,{memory: {spook: spookRooms, role: 'spooker', count: 50}});
+            spawn.spawnCreep([MOVE],name,{memory: {spook: spookRooms, role: 'spooker', count: 50}});
         }
         
     },

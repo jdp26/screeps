@@ -37,7 +37,7 @@ var roleHarvester = {
         
 	},
 	
-	spawn: function(num,room){
+	spawn: function(num,room,spawn){
 	    var harvesters = room.memory.harvesters;
         var newName='Harvester'+Game.time;
         var Body;
@@ -71,7 +71,7 @@ var roleHarvester = {
         
         if(harvesters<(num*creepsPerSource)){
 	         
-                    if(Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'harvester'}})==0){					
+                    if(spawn.spawnCreep(Body, newName, {memory: {role: 'harvester'}})==0){					
                     var creep =Game.creeps[newName];
 					creep.memory.home = room.name;
                     var sources = [];
@@ -97,7 +97,7 @@ var roleHarvester = {
     
 	},
 	
-	Mineralspawn: function(room){
+	Mineralspawn: function(room,spawn){
 	    var harvesters = room.memory.mineralHarvest;
         var newName='Harvester'+Game.time;
         var Body;
@@ -122,7 +122,7 @@ var roleHarvester = {
    
 
         if(harvesters<1 && Game.getObjectById(room.memory.mineralid).mineralAmount>0){	         
-            if(Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'mineralharvester'}})==0){					
+            if(spawn.spawnCreep(Body, newName, {memory: {role: 'mineralharvester'}})==0){					
                 var creep =Game.creeps[newName];
 				creep.memory.home = room.name;
 				creep.memory.source=room.memory.mineralid;

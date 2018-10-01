@@ -105,7 +105,7 @@ var roleVandle ={
         }
      
     },
-    spawn: function(room,mineRoom){
+    spawn: function(room,mineRoom,spawn){
 		var num;
         var skip =false;
 		if(Memory.hostile[mineRoom].evacuate==true){skip=true;}
@@ -140,7 +140,7 @@ var roleVandle ={
 			    
 			}
             if(harvesters.length<num){
-                Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'vandle', home: room.name, mine: mineRoom}})
+                spawn.spawnCreep(Body, newName, {memory: {role: 'vandle', home: room.name, mine: mineRoom}})
             }
             
         }

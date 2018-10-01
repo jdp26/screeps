@@ -1,5 +1,5 @@
 var spawnkill ={
-    spawn: function(room,target){
+    spawn: function(room,target,spawn){
       var parts=Math.min(Math.floor(room.energyAvailable/150),4);
       var Body=[];
       var count=0;
@@ -9,7 +9,7 @@ var spawnkill ={
           count=count+1;
       }
       var Name = 'SKill'+Game.time;
-      Game.getObjectById(room.memory.spawns).spawnCreep(Body, Name, {memory: {role: 'SKill', home: room.name, targetroom: target}})
+      spawn.spawnCreep(Body, Name, {memory: {role: 'SKill', home: room.name, targetroom: target}})
       
     },
     run: function(creep){

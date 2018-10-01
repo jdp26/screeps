@@ -17,7 +17,7 @@ var roleTrucker = {
         }
     },
     
-    spawn: function(num,room){
+    spawn: function(num,room,spawn){
 		num=Math.min(num,2);
         var truckers = room.memory.trucker;
         var extensions=room.memory.extensions;
@@ -41,7 +41,7 @@ var roleTrucker = {
 		}
         if(truckers<num*mult){
             var newName='Trucker'+Game.time;                   
-            Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'trucker'}});
+            spawn.spawnCreep(Body, newName, {memory: {role: 'trucker'}});
 		}
     }
 };
