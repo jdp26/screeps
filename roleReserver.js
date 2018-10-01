@@ -15,6 +15,9 @@ var roleReserver ={
 	},
 	
 	spawn: function(room,reserveRoom,spawn){
+		var skip =false;
+		if(Memory.hostile[reserveRoom].evacuate==true){skip=true;}
+        if(skip==false){			
 		var extensions = room.memory.extensions;
 		if(extensions>19){
 		var Reservers=_.filter(Game.creeps, (creep) => creep.memory.role == 'reserve' && creep.memory.reserve==reserveRoom).length;
@@ -26,6 +29,7 @@ var roleReserver ={
 				}
 			}
 		}}
+		}
 	},
 };
 module.exports = roleReserver;
