@@ -41,11 +41,12 @@ var room_control={
 			}
 			//Normall Code
 			var structures = room.find(FIND_STRUCTURES);
-			if(room.controller.level>6 && Math.floor(Game.ticks/100)*100==Game.ticks){
+			if(room.controller.level>6 && Math.floor(Game.time/100)*100==Game.time){
 				spawns=_.filter(structures, (structure) => structure.structureType==STRUCTURE_SPAWN);
 				if(spawns.length>room.memory.spawns.length){
+					console.log('New spawn detected');
 					room.memory.spawns=[];
-					for (var s in spawns){
+					for (var s of spawns){
 						room.memory.spawns.push(s.id);
 					}
 				}
@@ -91,10 +92,10 @@ var room_control={
     },
     creepCreate: function(room,container_count,tower_count){
         if(room != undefined && room.memory.spawns.length>0){
-		for (var spawnID in room.memory.spawns){
+		for (var spawnID of room.memory.spawns){
 			var spawn=Game.getObjectById(spawnID);
-			if(spawn.spawning == null){
-			roleHarvester.spawn(room.memory.sources.length,room);
+			if(spawn != null && spawn.spawning == null){
+			roleHarvester.spawn(room.memory.sources.length,room,spawn);
 			if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
 			else{
 				//MOD TEMPORARY
@@ -196,27 +197,23 @@ var room_control={
 					if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
 						gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id,spawn);
 					}
-                    roleVandle.spawn(room,room.memory.mine[i]);
-                    roleRemoteTruck.spawn(room,room.memory.mine[i]);
-					roleReserver.spawn(room,room.memory.mine[i]);
-                    i=i+1;
                 }
             }
             var spk=room.memory.spook.length;
             var pass=0;
             while(pass<spk){
-                roleSpook.spawn(room,room.memory.spook[pass]);
+                roleSpook.spawn(room,room.memory.spook[pass],spawn);
                 pass=pass+1;
             }
 			
 			if(room.controller.level>5 && room.terminal!=null && room.terminal!=undefined){
 				if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
-					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id);
+					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id,spawn);
 				}
 			}
 			
 			if(room.controller.level>5 && room.memory.extractor==true){
-				roleHarvester.Mineralspawn(room);
+				roleHarvester.Mineralspawn(room,spawn);
 			}
 			
         }
