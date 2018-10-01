@@ -312,14 +312,14 @@ var room_control={
     },
     hostile: function(room){         
             var name='Defender' +Game.time;
-			if(Game.getObjectById(room.memory.spawns).spawning == null){
-				if(room.energyAvailable<380)Game.getObjectById(room.memory.spawns).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE],name, {memory: {role: 'defender'}});
-				else{Game.getObjectById(room.memory.spawns).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE,MOVE,MOVE],name, {memory: {role: 'defender'}});}
+			if(Game.getObjectById(room.memory.spawns[0]).spawning == null){
+				if(room.energyAvailable<380)Game.getObjectById(room.memory.spawns[0]).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE],name, {memory: {role: 'defender'}});
+				else{Game.getObjectById(room.memory.spawns[0]).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE,MOVE,MOVE],name, {memory: {role: 'defender'}});}
 			}
     },
     store: function(room){
         var distribute = _.filter(Game.creeps, (creep) => creep.memory.role == 'distribute' && creep.room.name==room.name);
-        if(distribute.length<2 && Game.getObjectById(room.memory.spawns).spawning == null){
+        if(distribute.length<2 && Game.getObjectById(room.memory.spawns[0]).spawning == null){
             var newName='Distribute'+Game.time;
 			var parts= Math.floor(room.energyAvailable/100);
 			if(parts>1){
@@ -333,18 +333,18 @@ var room_control={
 						break;
 					}
 				}
-				if(Game.getObjectById(room.memory.spawns).spawning == null){
-					Game.getObjectById(room.memory.spawns).spawnCreep(distBody,newName, {memory: {role: 'distribute' , home: room.name}});
+				if(Game.getObjectById(room.memory.spawns[0]).spawning == null){
+					Game.getObjectById(room.memory.spawns[0]).spawnCreep(distBody,newName, {memory: {role: 'distribute' , home: room.name}});
 				}
 			}
         }
     },
     cleaner: function(room){
         var cleaners =  _.filter(Game.creeps, (creep) => creep.memory.role == 'cleaner' && creep.room.name==room.name);
-        if(cleaners.length==0 && Game.getObjectById(room.memory.spawns).spawning == null){
+        if(cleaners.length==0 && Game.getObjectById(room.memory.spawns[0]).spawning == null){
             var newName = 'Cleaner'+Game.time;
-			if(Game.getObjectById(room.memory.spawns).spawning == null){
-				Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],newName, {memory: {role: 'cleaner'}});
+			if(Game.getObjectById(room.memory.spawns[0]).spawning == null){
+				Game.getObjectById(room.memory.spawns[0]).spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],newName, {memory: {role: 'cleaner'}});
 			}
         }
     },
