@@ -14,6 +14,7 @@ var roleReserver = require('roleReserver');
 var roleLinkMan = require('role.roleLinkMan');
 var roleTowerMan=require('role.roleTowerMan');
 var spawnkill=require('role.spawnkill');
+var roleDismantle=require('role.dismantler');
 
 var room_control={
     maintain: function(name){
@@ -115,6 +116,9 @@ var room_control={
 			    if(room.memory.claim){
 				    claim.claim(room,room.memory.claim,spawn);
 			    }
+				if(room.memory.dismantle){
+					roleDismantle.spawn(room,room.memory.dismantle,spawn);
+				}
 				if(room.controller.level>5){
 					roleHarvester.Mineralspawn(room,spawn);
 				}

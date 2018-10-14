@@ -21,6 +21,7 @@ global.gofer=require('role.gofer');
 global.user=require('user');
 const profiler = require('screeps-profiler');
 profiler.enable();
+var roleDismantle=require('role.dismantler');
 
 module.exports.loop = function () {
  
@@ -104,6 +105,9 @@ module.exports.loop = function () {
 			}
 			if(creep.memory.role=='SKill'){
 			    spawnkill.run(creep);
+			}
+			if(creep.memory.role=='dismantler'){
+				roleDismantle.run(creep);
 			}
 			}
         }
