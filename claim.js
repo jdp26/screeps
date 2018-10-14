@@ -3,21 +3,21 @@ var roleremBuilder = require('role.remotebuilder');
 var roleVandle = require('role.vandle');
 
 var claim={
-	claim: function(room,claimRoom){
+	claim: function(room,claimRoom,spawn){
 		if(Memory.hostile[claimRoom]==undefined){
 			Memory.hostile[claimRoom]={};
 			Memory.hostile[claimRoom].evacuate=false;
 			Memory.hostile[claimRoom].nonhostile=false;			
 		}
 		
-		if(Game.getObjectById(room.memory.spawns).spawning == null){
-		roleDefender.spawn(room.name,claimRoom);
+		if(spawn.spawning == null){
+		roleDefender.spawn(room.name,claimRoom,spawn);
 		var claimers=_.filter(Game.creeps, (creep) => creep.memory.role == 'claimer');
 		if(claimers.length<1 && (Game.rooms[claimRoom]==undefined || Game.rooms[claimRoom].controller.owner==undefined)){
-			claim.spawn(room,claimRoom);
+			claim.spawn(room,claimRoom,spawn);
 		}
-		roleremBuilder.spawn(4,room,claimRoom);
-		roleVandle.spawn(room,claimRoom);
+		roleremBuilder.spawn(4,room,claimRoom,spawn);
+		roleVandle.spawn(room,claimRoom,spawn);
 		}
 		
 		if(Game.rooms[claimRoom]!=undefined){
@@ -25,6 +25,8 @@ var claim={
 		if(spawner.length>0){
 			delete room.memory.claim;
 			Memory.rooms[claimRoom]={};
+			Memory.rooms[claimRoom].spawns=[];
+			Memory.rooms[claimRoom].spawns.push(spawner[0].id);
 		}}
 	},
 	
@@ -39,9 +41,9 @@ var claim={
 		}
 	},
 	
-	spawn: function(room,claimRoomname){
+	spawn: function(room,claimRoomname,spawn){
 		var newName='Claimer'+Game.time;
-		Game.getObjectById(room.memory.spawns).spawnCreep([CLAIM,MOVE,MOVE], newName, {memory: {role: 'claimer', claimRoom: claimRoomname}});
+		spawn.spawnCreep([CLAIM,MOVE,MOVE], newName, {memory: {role: 'claimer', claimRoom: claimRoomname}});
 	},
 };
 

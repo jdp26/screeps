@@ -2,26 +2,36 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if(_.sum(creep.carry)== 0 && creep.memory.upgrader){
-            creep.memory.upgrader = false;
-        }
-        
-        if(_.sum(creep.carry) == creep.carryCapacity && !creep.memory.upgrader){
-            creep.memory.upgrader = true;
-        }
-        
-	    if(!creep.memory.upgrader) {
-            creep.fill();
-        }
-        
-        if(creep.memory.upgrader){
-            if(creep.carry.energy>0){
-				creep.upgrade();}
-            else{
-				//if picked up minerals ...
+        if(creep.ticksToLive<30){
+			if(_.sum(creep.carry)>0){
 				creep.truck();
 			}
-        }
+			else{
+				creep.suicide();
+			}
+		}
+		else{
+            if(_.sum(creep.carry)== 0 && creep.memory.upgrader){
+                creep.memory.upgrader = false;
+            }
+            
+            if(_.sum(creep.carry) == creep.carryCapacity && !creep.memory.upgrader){
+                creep.memory.upgrader = true;
+            }
+            
+    	    if(!creep.memory.upgrader) {
+                creep.fill();
+            }
+            
+            if(creep.memory.upgrader){
+                if(creep.carry.energy>0){
+    				creep.upgrade();}
+                else{
+    				//if picked up minerals ...
+    				creep.truck();
+    			}
+            }
+		}
         
 	},
 	

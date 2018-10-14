@@ -37,7 +37,7 @@ var roleLinkMan = {
 		var linkers= _.filter(Game.creeps, (creep) => creep.memory.role == 'linker' && creep.room.name==room.name).length;
 		if(linkers==0){
 			var name = 'Linker'+Game.time;
-			if(Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],name,{memory: {role: 'linker'}})==0){
+			if(Game.getObjectById(room.memory.spawns[0]).spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE],name,{memory: {role: 'linker'}})==0){
 			for(var output of room.memory.link){
 				if(output.type=='output'){
 				reciever = Game.getObjectById(output.name);

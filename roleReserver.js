@@ -14,7 +14,7 @@ var roleReserver ={
 		}
 	},
 	
-	spawn: function(room,reserveRoom,spawn){
+    spawn: function(room,reserveRoom,spawn){
 		var skip =false;
 		if(Memory.hostile[reserveRoom].evacuate==true){skip=true;}
         if(skip==false){			

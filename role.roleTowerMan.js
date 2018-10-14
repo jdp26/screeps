@@ -10,10 +10,10 @@ var roleTowerMan = {
 		if(creep.memory.load==undefined){
 			creep.memory.load=true;
 		}
-		if(creep.carry.energy==0 && creep.memory.load==false){
+		if(_.sum(creep.carry)==0 && creep.memory.load==false){
 			creep.memory.load=true;
 		}
-		if(creep.carry.energy>0 && creep.memory.load==true){
+		if(_.sum(creep.carry)==creep.carryCapacity && creep.memory.load==true){
 			creep.memory.load=false;
 		}
 		
@@ -32,6 +32,7 @@ var roleTowerMan = {
 		}
 		else{
 			if(creep.memory.towers!=undefined){
+			    if(creep.carry.energy>0){
 				if(creep.memory.current == undefined){
 				for(var tid of creep.memory.towers){
 					var tower=Game.getObjectById(tid);
@@ -52,7 +53,13 @@ var roleTowerMan = {
 						delete creep.memory.current;
 					}
 				}
+			    }
+			    else{
+			        // If creep has picked up not energy...
+			        creep.truck();
+			    }
 			}
+
 		}
 	},
 	
@@ -60,7 +67,7 @@ var roleTowerMan = {
 		var linkers= _.filter(Game.creeps, (creep) => creep.memory.role == 'towerfill' && creep.room.name==room.name).length;
 		if(linkers==0){
 			var name = 'TowerFiller'+Game.time;
-			Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE],name,{memory: {role: 'towerfill'}});
+			Game.getObjectById(room.memory.spawns[0]).spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE],name,{memory: {role: 'towerfill'}});
 		}
 	},
 };

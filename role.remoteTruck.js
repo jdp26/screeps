@@ -35,6 +35,10 @@ var roleRemoteTruck ={
 			
 			if(creep.memory.hostile==undefined || creep.memory.hostile==false){
 			    creep.memory.hostile=false;
+			    if(creep.memory.building == undefined){
+			        creep.memory.building =false;
+			    }
+			    
 				if(!creep.memory.building && creep.carry.energy==creep.carryCapacity){
 						creep.memory.building = true;						
 					}
@@ -44,7 +48,7 @@ var roleRemoteTruck ={
 					
 				if(!creep.memory.building){
 					if(currentRoom == mine){
-						if(creep.room.storage==undefined){
+						if(creep.room.storage==undefined || creep.room.storage.owner.username!='jodape'){
 					    var container = creep.room.find(FIND_STRUCTURES, {
 						filter: (structure) => { return (structure.structureType == STRUCTURE_CONTAINER && (creep.carryCapacity-creep.carry.energy) < structure.store[RESOURCE_ENERGY] )}});
 						if(container.length>0 && creep.body.length!=5){creep.fill();}
@@ -62,7 +66,7 @@ var roleRemoteTruck ={
 				
 				if(creep.memory.building){
 					if(currentRoom == mine){
- 
+                        creep.memory.linkcheckcount=0;
 							creep.moveToRoom(home);
 						}
 						else if(currentRoom == home){

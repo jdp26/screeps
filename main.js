@@ -36,7 +36,7 @@ module.exports.loop = function () {
 
     for(var r in Memory.rooms){
         var room=Game.rooms[r];
-        if(room!= undefined && room.memory.spawns.length>0){
+        if(room!= undefined && room.memory.spawns != undefined && room.memory.spawns.length>0){
             room_control.maintain(r);
         }
     }
@@ -108,7 +108,11 @@ module.exports.loop = function () {
 			}
         }
     
-	}});
+	}
+        else{
+            Game.notify('Bucket Low, skipped Tick',5);
+        }
+    });
 
 
 }

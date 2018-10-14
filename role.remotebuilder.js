@@ -22,7 +22,7 @@ var roleremBuilder = {
         
     },
     
-    spawn: function(num,room,target){
+    spawn: function(num,room,target,spawn){
         var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'remotebuilder');
         var extensions = room.memory.extensions;
 		var energyReq;
@@ -37,7 +37,7 @@ var roleremBuilder = {
         if(builders.length<num && room.energyAvailable>(energyReq-1)){
             var newName='Builder'+Game.time;
 
-            Game.getObjectById(room.memory.spawns).spawnCreep(Body, newName, {memory: {role: 'remotebuilder', buildRoom: target}});
+            spawn.spawnCreep(Body, newName, {memory: {role: 'remotebuilder', buildRoom: target}});
 
             
         }

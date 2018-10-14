@@ -32,7 +32,7 @@ var gofer = {
 	    var room=Game.rooms[roomName]
 		var name = 'Gofer'+Game.time;
 		if(room.energyAvailable>400){
-		if(Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE],name,{memory: {role: 'gofer'}})==0){
+		if(spawn.spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE],name,{memory: {role: 'gofer'}})==0){
 			var creep =Game.creeps[name];
 			creep.memory.resource=resource;
 			creep.memory.source=source;
@@ -41,15 +41,16 @@ var gofer = {
 		}
 	},
 	
-	spawnMini: function(roomName,resource,source,target){
+	spawnMini: function(roomName,resource,source,target,spawn){
 	    var room=Game.rooms[roomName]
 		var name = 'Gofer'+Game.time;
 		if(room.energyAvailable>400){
-		if(Game.getObjectById(room.memory.spawns).spawnCreep([CARRY,MOVE],name,{memory: {role: 'gofer'}})==0){
+		if(spawn.spawnCreep([CARRY,MOVE],name,{memory: {role: 'gofer'}})==0){
 			var creep =Game.creeps[name];
 			creep.memory.resource=resource;
 			creep.memory.source=source;
 			creep.memory.target=target;
+			room.memory.miniGofer=room.memory.miniGofer+1;
 		}
 		}
 	}

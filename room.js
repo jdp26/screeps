@@ -40,11 +40,19 @@ var room_control={
 				room.controller.activateSafeMode();}
 			}
 			//Normall Code
+			if(room.memory.prebuild != undefined && room.memory.prebuild.length>0){
+			    for(var building of room.memory.prebuild){
+			        if(room.controller.level==building.level){
+			            room.createConstructionSite(building.x,building.y,building.type);
+			        }
+			    }
+			    delete room.memory.prebuild;
+			}
 			var structures = room.find(FIND_STRUCTURES);
 			if(room.controller.level>6 && Math.floor(Game.time/100)*100==Game.time){
 				spawns=_.filter(structures, (structure) => structure.structureType==STRUCTURE_SPAWN);
 				if(spawns.length>room.memory.spawns.length){
-					console.log('New spawn detected');
+				    console.log('New spawn detected');
 					room.memory.spawns=[];
 					for (var s of spawns){
 						room.memory.spawns.push(s.id);
@@ -64,9 +72,6 @@ var room_control={
 			if(eExtensionSpawns.length>0){room.memory.emptyExtensionSpawn=eExtensionSpawns[0].id;}
 			var eTower=_.filter(towers,(s) => s.energy<s.energyCapacity);
 			if(eTower.length>0){room.memory.emptyTower=eTower[0].id;}
-			if(room.memory.claim){
-				claim.claim(room,room.memory.claim);
-			}
             var host=room.memory.hostile;
 			if(host>0){room_control.hostile(room);}
             if(host==0){room_control.creepCreate(room,container_count,tower_count);}
@@ -97,14 +102,19 @@ var room_control={
 			if(spawn != null && spawn.spawning == null){
 			roleHarvester.spawn(room.memory.sources.length,room,spawn);
 			if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
+			else if(room.controller.level>6){ var up=3;}
 			else{
 				//MOD TEMPORARY
 				//var up = 4 + room.memory.mine.length;
 				var up =4;
 			 }
+			 
 			if(room.controller.level>7){up=1;}
 			if(room.memory.harvesters>0){roleUpgrader.spawn(up,room,spawn);}
 			if(room.controller.level>1){
+			    if(room.memory.claim){
+				    claim.claim(room,room.memory.claim,spawn);
+			    }
 				if(room.controller.level>5){
 					roleHarvester.Mineralspawn(room,spawn);
 				}
@@ -115,7 +125,7 @@ var room_control={
 				roleTrucker.spawn(container_count,room,spawn);
 				var sites=room.find(FIND_CONSTRUCTION_SITES);
 				roleBuilder.spawn(2*Math.min(sites.length,2),room,spawn);			
-				if((tower_count==0 || tower_count==undefined) && (room.memory.road_count>0 || room.memory.container_count>0)){roleEngineer.spawn(2,room,room.name,spawn);}
+				if((tower_count==0 || tower_count==undefined || room.controller.level<4) && (room.memory.road_count>0 || room.memory.container_count>0)){roleEngineer.spawn(2,room,room.name,spawn);}
 				if(room.memory.reserve==undefined){
 					room.memory.reserve=[];
 				}
@@ -209,6 +219,11 @@ var room_control={
 			if(room.controller.level>5 && room.terminal!=null && room.terminal!=undefined){
 				if(room.storage.store[room.memory.mineral]>10000 && room.memory.mineralGofer==0){
 					gofer.spawn(room.name,room.memory.mineral,room.storage.id,room.terminal.id,spawn);
+					room.memory.mineralGofer=1;
+				}
+				
+				if(room.terminal.store[RESOURCE_ENERGY]>10000 && room.storage.store[RESOURCE_ENERGY]<500000 && room.memory.miniGofer==0){
+				    gofer.spawnMini(room.name,RESOURCE_ENERGY,room.terminal.id,room.storage.id,spawn);
 				}
 			}
 			
@@ -356,6 +371,7 @@ var room_control={
 				reciever = Game.getObjectById(output.name);
 			}
 		}
+		if(reciever.energy<reciever.energyCapacity){
 		for(var input of room.memory.link){
 			if(input.type=='input'){
 				var transmitter = Game.getObjectById(input.name);
@@ -363,7 +379,7 @@ var room_control={
 					transmitter.transferEnergy(reciever);
 				}
 			}
-		}
+		}}
 	},
 	countCreeps: function(room){
 		room.memory.hostile=room.find(FIND_HOSTILE_CREEPS).length;
@@ -377,7 +393,8 @@ var room_control={
 		room.memory.builders = _.filter(creepsInRoom, (creep) => creep.memory.role == 'builder').length;
 		room.memory.mineralHarvest = _.filter(creepsInRoom, (creep) => creep.memory.role == 'mineralharvester').length;
 		if(room.memory.mineral != undefined){
-			room.memory.mineralGofer = _.filter(creepsInRoom, (creep) => creep.memory.role == 'gofer' && creep.memory.resource == room.memory.mineral).length;
+			room.memory.mineralGofer = _.filter(creepsInRoom, (creep) => creep.memory.role == 'gofer' && creep.body.length>2 && creep.memory.resource == room.memory.mineral).length;
+			room.memory.miniGofer = _.filter(creepsInRoom, (creep) => creep.memory.role == 'gofer' && creep.body.length==2).length;
 		}
 		}
 	},

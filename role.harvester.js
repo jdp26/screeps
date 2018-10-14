@@ -61,7 +61,18 @@ var roleHarvester = {
         }
         
         if(harvesters==0){
-            Body=[WORK,WORK,CARRY,MOVE];
+            var energy=room.energyAvailable;
+            if(energy>249){
+                Body=[CARRY,CARRY];
+                var parts=Math.floor((energy-100)/150);
+                var count=0;
+                while(count<parts){
+                    Body.push(WORK);
+                    Body.push(MOVE);
+                    count=count+1;
+                    if(Body.length>14){break;}
+                }
+            }
             creepsPerSource=2;
         }
 		
@@ -126,6 +137,7 @@ var roleHarvester = {
                 var creep =Game.creeps[newName];
 				creep.memory.home = room.name;
 				creep.memory.source=room.memory.mineralid;
+				room.memory.mineralHarvest=1;
 	         }
         }
     
