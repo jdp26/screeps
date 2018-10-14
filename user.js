@@ -54,6 +54,10 @@ var user ={
 		Memory.rooms[HostRoomName].claim=TargetRoomName;
 		console.log(HostRoomName + ' will claim ' + TargetRoomName);
 	}
+	
+	clearMarket: function(){
+		for (var o in Game.market.orders){Game.market.cancelOrder(o);}
+	}
 };
 
 module.exports = user;
