@@ -126,7 +126,7 @@ module.exports = function () {
 			var target = this.memory.repairTarget;
 			if (target=='empty' || target==undefined){
 				var closestDamagedStructure = this.pos.findClosestByRange(FIND_STRUCTURES, {
-					filter: (structure) => structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL});
+					filter: (structure) => structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL && structure.structureType!=STRUCTURE_RAMPART});
 				if(closestDamagedStructure){this.memory.repairTarget=closestDamagedStructure.id;}
 				else{
 					this.memory.repairTarget='empty';
@@ -291,9 +291,9 @@ module.exports = function () {
 			var truckType=this.memory.truckType;
 			if(truckTarget=='empty' || truckTarget==undefined){
 				if(this.room.memory.hostile>0){
-					var towerTarget=Game.getObjectById(room.memory.emptyTower);
+					var towerTarget=Game.getObjectById(this.room.memory.emptyTower);
 					if(towerTarget==null){
-						var targets = Game.getObjectById(room.memory.emptyExtensionSpawn);				
+						var targets = Game.getObjectById(this.room.memory.emptyExtensionSpawn);				
 						if(targets!=null){
 							this.memory.truckTarget=targets.id;
 							this.memory.truckType='normal';
@@ -306,13 +306,13 @@ module.exports = function () {
 				}
 				var storage = this.room.storage;
 				if(storage==null || this.memory.role=='distribute' || this.room.memory.distrubute==0){
-					var targets = Game.getObjectById(room.memory.emptyExtensionSpawn);				
+					var targets = Game.getObjectById(this.room.memory.emptyExtensionSpawn);				
 					if(targets!=null){
 						this.memory.truckTarget=targets.id;
 						this.memory.truckType='normal';
 					}
 					else{
-						targets = Game.getObjectById(room.memory.emptyTower);
+						targets = Game.getObjectById(this.room.memory.emptyTower);
 						if(targets!=null){
 							this.memory.truckTarget=targets.id;
 							this.memory.truckType='normal';

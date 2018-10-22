@@ -82,6 +82,11 @@ var room_control={
             if(room.find(FIND_DROPPED_RESOURCES).length>0 && stores.length>0){
                 room_control.cleaner(room);
             }
+            if(room.controller.level>4){
+            	if(Math.floor(Game.time/200)*200==Game.time){
+				    room_control.linklist(room);
+				}
+            }
 			if(room.memory.link.length>0){
 				room_control.links(room);
 			}
@@ -118,6 +123,12 @@ var room_control={
 			    }
 				if(room.memory.dismantle){
 					roleDismantle.spawn(room,room.memory.dismantle,spawn);
+				}
+				if(room.memory.dismantleTarget){
+					roleDismantle.spawnTarget(room,room.memory.dismantleTarget.room,spawn,room.memory.dismantleTarget.id);
+				}
+				if(room.memory.drain){
+				    roleRemoteTruck.spawnDrain(room,room.memory.drain,spawn);
 				}
 				if(room.controller.level>5){
 					roleHarvester.Mineralspawn(room,spawn);
@@ -299,6 +310,14 @@ var room_control={
 	    if(!room.memory.scout){
 	        room_control.scout(room);
 	    }
+	    else if(room.memory.sources==undefined){
+	        var source = room.find(FIND_SOURCES)
+	        var count=0;
+            while(count<source.length){
+            room.memory.sources.push(source[count].id);
+            count=count+1;
+        }  
+	    }
 	    if(room.memory.scout){
 	        var newName='Scout' + room.name;
 			if(Game.spawns[0].spawning == null){
@@ -384,6 +403,23 @@ var room_control={
 				}
 			}
 		}}
+	},
+	linklist: function(room){
+	    var Link=room.find(FIND_STRUCTURES,{filter: s=> s.structureType==STRUCTURE_LINK});
+	    if(Link.length != room.memory.link.length){
+	        delete room.memory.link;
+	        room.memory.link = [];
+	        for(var l of Link){
+	            var store = l.pos.findInRange(FIND_STRUCTURES,3,{filter: s=> s.structureType==STRUCTURE_STORAGE});
+	            if(store.length>0){
+	                var pushOb={name:l.id, type:'output'};
+	            }
+	            else{
+	                var pushOb={name:l.id, type:'input'};
+	            }
+	            room.memory.link.push(pushOb);
+	        }
+	    }
 	},
 	countCreeps: function(room){
 		room.memory.hostile=room.find(FIND_HOSTILE_CREEPS).length;

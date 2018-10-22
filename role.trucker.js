@@ -39,6 +39,10 @@ var roleTrucker = {
 		    num=2;
 		    mult=1;
 		}
+		if(room.memory.sources.length==1){
+		    num=num/2;
+		    num=Math.min(1,num);
+		}
         if(truckers<num*mult){
             var newName='Trucker'+Game.time;                   
             spawn.spawnCreep(Body, newName, {memory: {role: 'trucker'}});

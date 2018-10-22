@@ -32,6 +32,10 @@ var roleDismantle ={
 			}
 			else{
 				if(creep.memory.target==null || creep.memory.target==undefined){
+				    if(creep.memory.prealoc!=undefined){
+				        delete creep.memory.prealoc;
+				        try{delete Game.rooms[creep.memory.home].memory.dismantleTarget;}catch(err){}
+				    }
 					roleDismantle.target(creep);
 				}
 				var tar=Game.getObjectById(creep.memory.target);
@@ -51,7 +55,7 @@ var roleDismantle ={
 			creep.memory.target=list[0].id;
 		}
 		else{
-		delete Game.rooms(creep.memory.home).memory.dismantle;
+		delete Game.rooms[creep.memory.home].memory.dismantle;
 			creep.suicide()
 		}
 	},
@@ -89,6 +93,32 @@ var roleDismantle ={
 			}
             if(harvesters.length<num){
                 spawn.spawnCreep(Body, newName, {memory: {role: 'dismantler', home: room.name, mine: mineRoom}})
+            }
+            
+        }
+    },
+    spawnTarget: function(room,mineRoom,spawn,targetID){
+		var num;
+        var skip =false;
+        if(skip==false)
+        {  	var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'dismantler' && creep.memory.mine== mineRoom && creep.memory.prealoc!=undefined );
+            var newName='Dismantler'+Game.time;
+            var Body;
+            var extensions = room.memory.extensions;
+            if(extensions<5){
+                Body=[WORK,WORK,MOVE,MOVE];
+
+            }
+            else if(extensions<10){
+                Body=[WORK,WORK,WORK,MOVE,MOVE,MOVE];
+
+            }
+			else{
+			    Body=[WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
+			}
+			num=2;
+            if(harvesters.length<num){
+                spawn.spawnCreep(Body, newName, {memory: {role: 'dismantler', home: room.name, mine: mineRoom, target: targetID, prealoc: true}})
             }
             
         }

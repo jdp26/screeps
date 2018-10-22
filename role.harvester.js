@@ -70,7 +70,7 @@ var roleHarvester = {
                     Body.push(WORK);
                     Body.push(MOVE);
                     count=count+1;
-                    if(Body.length>14){break;}
+                    if(Body.length>13){break;}
                 }
             }
             creepsPerSource=2;

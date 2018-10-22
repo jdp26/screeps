@@ -16,7 +16,7 @@ var claim={
 		if(claimers.length<1 && (Game.rooms[claimRoom]==undefined || Game.rooms[claimRoom].controller.owner==undefined)){
 			claim.spawn(room,claimRoom,spawn);
 		}
-		roleremBuilder.spawn(4,room,claimRoom,spawn);
+		roleremBuilder.spawn(6,room,claimRoom,spawn);
 		roleVandle.spawn(room,claimRoom,spawn);
 		}
 		
@@ -24,6 +24,7 @@ var claim={
 		var spawner=Game.rooms[claimRoom].find(FIND_STRUCTURES, {filter: (s) => s.structureType==STRUCTURE_SPAWN});
 		if(spawner.length>0){
 			delete room.memory.claim;
+			Game.notify('Claim Complete',5);
 			Memory.rooms[claimRoom]={};
 			Memory.rooms[claimRoom].spawns=[];
 			Memory.rooms[claimRoom].spawns.push(spawner[0].id);

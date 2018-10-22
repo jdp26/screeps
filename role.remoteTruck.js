@@ -48,6 +48,7 @@ var roleRemoteTruck ={
 					
 				if(!creep.memory.building){
 					if(currentRoom == mine){
+					    if(creep.memory.drain===undefined || creep.memory.drain===false){
 						if(creep.room.storage==undefined || creep.room.storage.owner.username!='jodape'){
 					    var container = creep.room.find(FIND_STRUCTURES, {
 						filter: (structure) => { return (structure.structureType == STRUCTURE_CONTAINER && (creep.carryCapacity-creep.carry.energy) < structure.store[RESOURCE_ENERGY] )}});
@@ -58,6 +59,27 @@ var roleRemoteTruck ={
 								creep.moveToObject(creep.room.storage);
 							}
 						}
+					}
+					 else{
+					       if(creep.memory.target===undefined || creep.memory.target===null && creep.memory.drain===true){
+					            var t=creep.pos.findClosestByPath(FIND_STRUCTURES, {filter: s => (s.energy!== undefined && s.energy>0) || (s.store !== undefined && s.store[RESOURCE_ENERGY]>0)});
+					            if(t !== null){
+					                creep.memory.target=t.id;
+					            }
+					            else if (creep.room.name==mine){
+					                Game.notify('Clear room drain',5);
+					                try{delete Game.rooms[home].memory.drain;}catch(err){creep.suicide();}
+					                creep.suicide();
+					            }
+					        }
+					        var target = Game.getObjectById(creep.memory.target);
+					        if(creep.withdraw(target,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE){
+								creep.moveToObject(target);
+							}
+							else{
+							    creep.memory.target=null;
+							}
+					    }
 					}
 					else{
 						creep.moveToRoom(mine);
@@ -129,6 +151,29 @@ var roleRemoteTruck ={
 			
             if(harvesters.length<num && room.energyAvailable>energyNeeded-1){
                 spawn.spawnCreep(Body, newName, {memory: {role: 'remoteTruck', home: room.name, mine: mineRoom}})
+
+            }
+        }
+    },
+    
+    spawnDrain: function(room,mineRoom,spawn){
+        var num=2;
+        var skip =false;
+		
+        var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'remoteTruck' && creep.memory.mine==mineRoom);
+        if(skip==false || harvesters.length==0){
+		    var energyNeeded;
+            var newName='RTruck'+Game.time;
+            var Body;
+            var extensions = room.memory.extensions;
+            if(extensions<5){Body=[CARRY,MOVE];energyNeeded=100;}
+            else if (extensions<11){Body=[CARRY,CARRY,CARRY,CARRY,MOVE,MOVE];energyNeeded=300;}
+            else if (extensions<15){Body=[CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];energyNeeded=600;}
+            else {Body=[CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];energyNeeded=1000;}
+
+			
+            if(harvesters.length<num && room.energyAvailable>energyNeeded-1){
+                spawn.spawnCreep(Body, newName, {memory: {role: 'remoteTruck', home: room.name, mine: mineRoom, drain: true}})
 
             }
         }

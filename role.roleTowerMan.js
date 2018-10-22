@@ -18,7 +18,7 @@ var roleTowerMan = {
 		}
 		
 		if(creep.memory.load){
-			if(room.storage != null){
+			if(creep.room.storage != null){
 				if(creep.room.storage.store[RESOURCE_ENERGY]>10000){
 					if(creep.withdraw(creep.room.storage,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE){
 					creep.moveToObject(creep.room.storage);
