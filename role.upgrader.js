@@ -2,36 +2,41 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
-        if(creep.ticksToLive<30){
-			if(_.sum(creep.carry)>0){
-				creep.truck();
-			}
-			else{
-				creep.suicide();
-			}
-		}
-		else{
-            if(_.sum(creep.carry)== 0 && creep.memory.upgrader){
-                creep.memory.upgrader = false;
-            }
-            
-            if(_.sum(creep.carry) == creep.carryCapacity && !creep.memory.upgrader){
-                creep.memory.upgrader = true;
-            }
-            
-    	    if(!creep.memory.upgrader) {
-                creep.fill();
-            }
-            
-            if(creep.memory.upgrader){
-                if(creep.carry.energy>0){
-    				creep.upgrade();}
-                else{
-    				//if picked up minerals ...
+        if(creep.memory.home!= undefined && creep.room.name != creep.memory.home){
+            creep.moveToRoom(creep.memory.home);
+        }
+        else{
+            if(creep.ticksToLive<30){
+    			if(_.sum(creep.carry)>0){
     				creep.truck();
     			}
-            }
-		}
+    			else{
+    				creep.suicide();
+    			}
+    		}
+    		else{
+                if(_.sum(creep.carry)== 0 && creep.memory.upgrader){
+                    creep.memory.upgrader = false;
+                }
+                
+                if(_.sum(creep.carry) == creep.carryCapacity && !creep.memory.upgrader){
+                    creep.memory.upgrader = true;
+                }
+                
+        	    if(!creep.memory.upgrader) {
+                    creep.fill();
+                }
+                
+                if(creep.memory.upgrader){
+                    if(creep.carry.energy>0){
+        				creep.upgrade();}
+                    else{
+        				//if picked up minerals ...
+        				creep.truck();
+        			}
+                }
+    		}
+        }
         
 	},
 	
@@ -78,9 +83,12 @@ var roleUpgrader = {
             Body=[WORK,CARRY,MOVE,MOVE];
 			energyReq=250;
         }
+        if(room.storage!=null && room.storage.store[RESOURCE_ENERGY]>300000 && room.controller.level!=8){
+            num=num*2;
+        }
         if(upgraders<num && room.energyAvailable>(energyReq-1)){
 	        var newName='Upgrader'+Game.time;
-             spawn.spawnCreep(Body, newName, {memory: {role: 'upgrader'}});           
+             spawn.spawnCreep(Body, newName, {memory: {role: 'upgrader', home:room.name}});           
         }
 	}
 };
