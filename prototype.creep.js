@@ -290,20 +290,6 @@ module.exports = function () {
 			var truckTarget=this.memory.truckTarget;
 			var truckType=this.memory.truckType;
 			if(truckTarget=='empty' || truckTarget==undefined){
-				if(this.room.memory.hostile>0){
-					var towerTarget=Game.getObjectById(this.room.memory.emptyTower);
-					if(towerTarget==null){
-						var targets = Game.getObjectById(this.room.memory.emptyExtensionSpawn);				
-						if(targets!=null){
-							this.memory.truckTarget=targets.id;
-							this.memory.truckType='normal';
-						}
-					}
-					else{					
-						this.memory.truckTarget=towerTarget.id;
-						this.memory.truckType='normal';
-					}
-				}
 				var storage = this.room.storage;
 				if(storage==null || this.memory.role=='distribute' || this.room.memory.distrubute==0){
 					var targets = Game.getObjectById(this.room.memory.emptyExtensionSpawn);				

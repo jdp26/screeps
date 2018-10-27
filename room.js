@@ -275,7 +275,7 @@ var room_control={
 						var wall_check=false;
 						var wall2;
 						while(wall_check==false){
-							wall2= _.filter(structures,(structure) => structure.hits < wall_hits && (structure.structureType == STRUCTURE_WALL ||  structure.structureType == STRUCTURE_RAMPART));
+							wall2= _.filter(walls,(structure) => structure.hits < wall_hits);
 							if(wall2.length>0){
 								wall_check=true;
 							}
@@ -348,12 +348,18 @@ var room_control={
             count=count+1;
         }  
     },
-    hostile: function(room){         
-            var name='Defender' +Game.time;
+    hostile: function(room){   
+            if(Memory.hostile[room.name]==undefined){
+                Memory.hostile[room.name]={};
+                Memory.hostile[room.name].nonhostile=false;
+            }
+            Memory.hostile[room.name].hostileCount=room.memory.hostile;
+            roleDefender.spawn(room.name,room.name,Game.getObjectById(room.memory.spawns[0]));
+            /*var name='Defender' +Game.time;
 			if(Game.getObjectById(room.memory.spawns[0]).spawning == null){
 				if(room.energyAvailable<380)Game.getObjectById(room.memory.spawns[0]).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE],name, {memory: {role: 'defender'}});
 				else{Game.getObjectById(room.memory.spawns[0]).spawnCreep([TOUGH,TOUGH,MOVE,ATTACK,ATTACK,MOVE,MOVE,MOVE],name, {memory: {role: 'defender'}});}
-			}
+			}*/
     },
     store: function(room){
         var distribute = _.filter(Game.creeps, (creep) => creep.memory.role == 'distribute' && creep.room.name==room.name);
