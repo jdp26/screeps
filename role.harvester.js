@@ -132,7 +132,7 @@ var roleHarvester = {
         }       
    
 
-        if(harvesters<1 && Game.getObjectById(room.memory.mineralid).mineralAmount>0){	         
+        if(harvesters<1 && room.memory.mineralid != undefined && Game.getObjectById(room.memory.mineralid).mineralAmount>0){	         
             if(spawn.spawnCreep(Body, newName, {memory: {role: 'mineralharvester'}})==0){					
                 var creep =Game.creeps[newName];
 				creep.memory.home = room.name;
