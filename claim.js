@@ -17,7 +17,7 @@ var claim={
 			claim.spawn(room,claimRoom,spawn);
 		}
 		roleremBuilder.spawn(6,room,claimRoom,spawn);
-		roleVandle.spawn(room,claimRoom,spawn);
+		roleVandle.spawnQuick(room,claimRoom,spawn);
 		}
 		
 		if(Game.rooms[claimRoom]!=undefined){

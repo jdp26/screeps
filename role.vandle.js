@@ -145,6 +145,46 @@ var roleVandle ={
             
         }
     },
+    spawnQuick: function(room,mineRoom,spawn){
+		var num;
+        var skip =false;
+		if(Memory.hostile[mineRoom].evacuate==true){skip=true;}
+        if(skip==false)
+        {  	var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'vandle' && creep.memory.mine== mineRoom);
+            //console.log('Vandles(?): ' + harvesters.length);
+            var newName='Vandle'+Game.time;
+            var Body;
+            var extensions = room.memory.extensions;
+            if(extensions<5){
+                Body=[WORK,CARRY,MOVE,MOVE];
+                if(Memory.mine[mineRoom]!=undefined){
+                    num=Memory.mine[mineRoom].source*2;
+                }
+                else{num=2;}
+                
+            }
+            else if(extensions<10){
+                Body=[WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE];
+                if(Memory.mine[mineRoom]!=undefined){
+                    num=Memory.mine[mineRoom].source*2;
+                }
+                else{num=2;}
+                
+            }
+			else{
+			    Body=[WORK,WORK,WORK,WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
+			    if(Memory.mine[mineRoom]!=undefined){
+                    num=Memory.mine[mineRoom].source;
+                }
+                else{num=1;}
+			    
+			}
+            if(harvesters.length<num){
+                spawn.spawnCreep(Body, newName, {memory: {role: 'vandle', home: room.name, mine: mineRoom}})
+            }
+            
+        }
+    },
 }
 
 module.exports = roleVandle;

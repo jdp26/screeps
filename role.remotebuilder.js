@@ -31,8 +31,8 @@ var roleremBuilder = {
             energyReq=200;
         }
         else{
-            Body=[WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE];
-            energyReq=650;
+            Body=[WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
+            energyReq=1100;
         }
         if(builders.length<num && room.energyAvailable>(energyReq-1)){
             var newName='Builder'+Game.time;
