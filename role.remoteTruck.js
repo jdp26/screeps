@@ -82,7 +82,18 @@ var roleRemoteTruck ={
 					    }
 					}
 					else{
-						creep.moveToRoom(mine);
+					    if(creep.memory.harvesttarget==undefined){
+						    creep.moveToRoom(mine);
+					    }
+					    else{
+					        var target = Game.getObjectById(creep.memory.harvesttarget);
+					        if(target!=null){
+					            creep.moveToObject(target);
+					        }
+					        else{
+					            creep.memory.harvesttarget='empty';
+					        }
+					    }
 					}
 				}
 				

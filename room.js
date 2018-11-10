@@ -107,16 +107,8 @@ var room_control={
 			var spawn=Game.getObjectById(spawnID);
 			if(spawn != null && spawn.spawning == null){
 			roleHarvester.spawn(room.memory.sources.length,room,spawn);
-			if(room.controller.level<4){var up = 8 + room.memory.mine.length;}
-			else if(room.controller.level>6){ var up=3;}
-			else{
-				//MOD TEMPORARY
-				//var up = 4 + room.memory.mine.length;
-				var up =4;
-			 }
-			 
-			if(room.controller.level>7){up=1;}
-			if(room.memory.harvesters>0){roleUpgrader.spawn(up,room,spawn);}
+
+			if(room.memory.harvesters>0){roleUpgrader.spawn(room,spawn);}
 			if(room.controller.level>1){
 			    if(room.memory.claim){
 				    claim.claim(room,room.memory.claim,spawn);
@@ -147,12 +139,29 @@ var room_control={
 				else if(room.memory.reserve.length>0){
 					var k=0;
 					while(k<room.memory.reserve.length){
+					    if(Memory.hostile[room.memory.reserve[k]]==undefined){
+					        Memory.hostile[room.memory.reserve[k]]={};
+					    }
+					    else{
 						if(Game.rooms[room.memory.reserve[k]]!=undefined){
-						roleReserver.spawn(room,room.memory.reserve[k],spawn);}
-						else{
-							if(_.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook==room.memory.reserve[k]).length==0){
-							roleSpook.spawn(room,room.memory.reserve[k],spawn);}
+						var hostile_list=Game.rooms[room.memory.reserve[k]].find(FIND_HOSTILE_CREEPS);
+						Memory.hostile[room.memory.reserve[k]].hostileCount=hostile_list.length;
+						if(hostile_list.length>0){
+								roleDefender.spawn(room.name,room.memory.reserve[k],spawn);
 						}
+						else{
+						roleReserver.spawn(room,room.memory.reserve[k],spawn);}
+						    
+						}
+						else{
+						    if(Memory.hostile[room.memory.reserve[k]].hostileCount>0){
+						        roleDefender.spawn(room.name,room.memory.reserve[k],spawn);
+						    }
+						    else{
+							if(_.filter(Game.creeps, (creep) => creep.memory.role == 'spooker' && creep.memory.spook==room.memory.reserve[k]).length==0){
+							roleSpook.spawn(room,room.memory.reserve[k],spawn);}}
+						}
+					    }
 						k=k+1;		
 					}
 				}
@@ -262,7 +271,8 @@ var room_control={
 				if(tower.energy>0){
 					var structures=room.find(FIND_STRUCTURES);
 					var DamagedStructure = _.filter(structures,(structure) => structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_RAMPART);
-					var walls = _.filter(structures, (structure) =>  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits < room.memory.wallMax);
+					var allWalls = _.filter(structures, (structure) =>  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits<structure.hitsMax);
+					var walls = _.filter(allWalls, (structure) =>  structure.hits < room.memory.wallMax);
 					var wall_hits=1000;
 					if(room.memory.hostile>0) {
 						var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
@@ -288,6 +298,9 @@ var room_control={
 						if(wall2.length>0){
 							tower.repair(wall2[0]);
 						}
+					}
+					else if(allWalls.length>0 && room.storage != undefined && room.storage.store[RESOURCE_ENERGY]>300000){
+					    room.memory.wallMax=room.memory.wallMax+10000;
 					}
 				}
             count=count+1;
@@ -373,7 +386,7 @@ var room_control={
 					distBody.push(CARRY);
 					distBody.push(MOVE);
 					counting=counting+1;
-					if(counting==25){
+					if(counting==20){
 						break;
 					}
 				}

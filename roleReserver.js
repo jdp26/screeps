@@ -4,19 +4,26 @@ var roleReserver ={
 			creep.moveToRoom(creep.memory.reserve);
 		}
 		else{
-			if(creep.reserveController(creep.room.controller)==ERR_NOT_IN_RANGE){
-				creep.moveToObject(creep.room.controller);
-			}
-			else if (creep.room.controller.sign== undefined || creep.room.controller.sign.username != 'jodape'){
-			    console.log('Signing Controller');
-			    creep.signController(creep.room.controller,'Claimed by Jodape');
-			}
+		    if(creep.room.controller.owner != undefined && creep.room.controller.owner.username != 'jodape'){
+		        if(creep.attackController(creep.room.controller)==ERR_NOT_IN_RANGE){
+    				creep.moveToObject(creep.room.controller);
+    			}
+		    }
+		    else{
+    			if(creep.reserveController(creep.room.controller)==ERR_NOT_IN_RANGE){
+    				creep.moveToObject(creep.room.controller);
+    			}
+    			else if (creep.room.controller.sign== undefined || creep.room.controller.sign.username != 'jodape'){
+    			    console.log('Signing Controller');
+    			    creep.signController(creep.room.controller,'Claimed by Jodape');
+    			}
+		    }
 		}
 	},
 	
     spawn: function(room,reserveRoom,spawn){
 		var skip =false;
-		if(Memory.hostile[reserveRoom].evacuate==true){skip=true;}
+		if(Memory.hostile[reserveRoom] == undefined || Memory.hostile[reserveRoom].hostileCount==undefined || Memory.hostile[reserveRoom].hostileCount>0){skip=true;}
         if(skip==false){			
 		var extensions = room.memory.extensions;
 		if(extensions>19){

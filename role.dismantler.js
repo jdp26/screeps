@@ -114,7 +114,7 @@ var roleDismantle ={
 
             }
 			else{
-			    Body=[WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
+			    Body=[MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE];
 			}
 			num=2;
             if(harvesters.length<num){

@@ -48,7 +48,18 @@ var roleVandle ={
                         creep.mine();
                     }
                     else{
-                        creep.moveToRoom(mine);
+                        if(creep.memory.source==undefined){
+                            creep.moveToRoom(mine);
+                        }
+                        else{
+                            var yellow=Game.getObjectById(creep.memory.source);
+                            if(yellow!=null){
+                                creep.moveToObject(yellow);
+                            }
+                            else{
+                                creep.moveToRoom(mine);
+                            }
+                        }
                     }
                 }
                 if(!creep.memory.building){
@@ -123,7 +134,7 @@ var roleVandle ={
                 else{num=2;}
                 
             }
-            else if(extensions<10){
+            else if(extensions<16){
                 Body=[WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE];
                 if(Memory.mine[mineRoom]!=undefined){
                     num=Memory.mine[mineRoom].source*2;

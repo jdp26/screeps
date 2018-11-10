@@ -21,7 +21,7 @@ var claim={
 		}
 		
 		if(Game.rooms[claimRoom]!=undefined){
-		var spawner=Game.rooms[claimRoom].find(FIND_STRUCTURES, {filter: (s) => s.structureType==STRUCTURE_SPAWN});
+		var spawner=Game.rooms[claimRoom].find(FIND_STRUCTURES, {filter: (s) => s.structureType==STRUCTURE_SPAWN && s.owner.username=='jodape'});
 		if(spawner.length>0){
 			delete room.memory.claim;
 			Game.notify('Claim Complete',5);

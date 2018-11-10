@@ -44,7 +44,7 @@ var gofer = {
 	spawnMini: function(roomName,resource,source,target,spawn){
 	    var room=Game.rooms[roomName]
 		var name = 'Gofer'+Game.time;
-		if(room.energyAvailable>400){
+		if(room.energyAvailable>100){
 		if(spawn.spawnCreep([CARRY,MOVE],name,{memory: {role: 'gofer'}})==0){
 			var creep =Game.creeps[name];
 			creep.memory.resource=resource;

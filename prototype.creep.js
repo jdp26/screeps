@@ -150,10 +150,13 @@ module.exports = function () {
 	Creep.prototype.builder=
 		function(){
 			var target = this.memory.buildTarget;
-			if(target==undefined){
+			if(target==undefined || target==null){
 				var targets = this.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 				if(targets){
 					this.memory.buildTarget=targets.id;
+					if(this.build(targets) == ERR_NOT_IN_RANGE){
+						this.moveToObject(targets);
+					}
 				}
 				else{
 					if(this.memory.role != 'remotebuilder'){

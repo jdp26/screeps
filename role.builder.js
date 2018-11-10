@@ -9,8 +9,8 @@ var roleBuilder = {
         }
         
         if(creep.memory.building){
-            if(creep.carry.energy>0){creep.builder();}
-            else{creep.truck();}
+            creep.builder();
+
         }
         
         if(!creep.memory.building){

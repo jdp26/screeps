@@ -36,7 +36,7 @@ var roleDefender ={
             var Body;
 			var energyReq;
             var extensions = room.memory.extensions;
-            if(Memory.hostile[mineRoom].nonhostile==true){
+            if(Memory.hostile[mineRoom].nonhostile==true && Memory.hostile[mineRoom].hostileCount==1){
                 Body=[TOUGH,ATTACK,MOVE,MOVE];
                 energyReq=190;
             }

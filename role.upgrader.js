@@ -40,7 +40,7 @@ var roleUpgrader = {
         
 	},
 	
-	spawn: function(num,room,spawn){
+	spawn: function(room,spawn){
 	    var upgraders = room.memory.upgraders;
         //console.log('Upgraders: ' + upgraders);
         var Body;
@@ -62,7 +62,8 @@ var roleUpgrader = {
 		    Body=[WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
 			energyReq=1000;
 		}
-		
+		var num=8;
+		if(room.memory.sources.length==1){num=4};
 		if(room.controller.level>4){
 		    num=3;
 			Body=[];
@@ -78,7 +79,8 @@ var roleUpgrader = {
 				if(Body.length>47){break;}
 			}
 		}
-		
+		if(room.controller.level==7){num=2;}
+		if(room.controller.level==8){num=1;}
         if(upgraders==0){
             Body=[WORK,CARRY,MOVE,MOVE];
 			energyReq=250;
