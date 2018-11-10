@@ -24,6 +24,10 @@ var roleDefender ={
                     
                 }
 				else{
+					if(Memory.hostile[creep.room.name].hostilecheck == undefined || Memory.hostile[creep.room.name].hostilecheck!=Game.time){
+						Memory.hostile[creep.room.name].hostilecheck=Game.time;
+						Memory.hostile[creep.room.name].hostileCount=creep.room.find(FIND_HOSTILE_CREEPS).length;
+					}
 					if(creep.pos.x== 0 || creep.pos.x == 49 || creep.pos.y == 0 || creep.pos.y == 49){
 						creep.moveTo(new RoomPosition(25,25, creep.memory.mine));
 					}
