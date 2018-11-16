@@ -22,6 +22,7 @@ global.user=require('user');
 const profiler = require('screeps-profiler');
 profiler.enable();
 var roleDismantle=require('role.dismantler');
+var roleBoo=require('roleBoo.js')
 
 module.exports.loop = function () {
  
@@ -108,6 +109,9 @@ module.exports.loop = function () {
 			}
 			if(creep.memory.role=='dismantler'){
 				roleDismantle.run(creep);
+			}
+			if(creep.memory.role=='peaker'){
+				roleBoo.run(creep);
 			}
 			}
         }
