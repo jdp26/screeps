@@ -111,6 +111,7 @@ module.exports.loop = function () {
 				roleDismantle.run(creep);
 			}
 			if(creep.memory.role=='peaker'){
+				creep.notifyWhenAttacked(false);
 				roleBoo.run(creep);
 			}
 			}
