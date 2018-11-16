@@ -15,7 +15,7 @@ var roleLinkMan = require('role.roleLinkMan');
 var roleTowerMan=require('role.roleTowerMan');
 var spawnkill=require('role.spawnkill');
 var roleDismantle=require('role.dismantler');
-var roleBoo=require('role.Boo.js')
+var roleBoo=require('role.Boo')
 
 var room_control={
     maintain: function(name){
