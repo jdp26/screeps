@@ -9,6 +9,9 @@ var roleRemoteTruck ={
             }
             if(currentRoom != home){
                 creep.moveToRoom(home);
+				if(creep.memory.harvesttarget != undefined){
+                    delete creep.memory.harvesttarget;
+                }
             }
             else{
                 if(creep.carry.energy>0){
