@@ -53,7 +53,19 @@ var user ={
 	claim: function(HostRoomName,TargetRoomName){
 		Memory.rooms[HostRoomName].claim=TargetRoomName;
 		console.log(HostRoomName + ' will claim ' + TargetRoomName);
-	}
+	},
+	
+	boo: function(HostRoomName,TargetRoomName,SafeRoomName){
+		Memory.rooms[HostRoomName].Boo={};
+		Memory.rooms[HostRoomName].Boo.target=TargetRoomName;
+		Memory.rooms[HostRoomName].Boo.safe=SafeRoomName;
+	},
+	
+	stopBoo: function(HostRoomName){
+		if(Memory.rooms[HostRoomName].Boo != undefined){
+			delete Memory.rooms[HostRoomName].Boo;
+		}
+	},
 };
 
 module.exports = user;
