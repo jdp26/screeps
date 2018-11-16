@@ -15,6 +15,7 @@ var roleLinkMan = require('role.roleLinkMan');
 var roleTowerMan=require('role.roleTowerMan');
 var spawnkill=require('role.spawnkill');
 var roleDismantle=require('role.dismantler');
+var roleBoo=require('role.Boo.js')
 
 var room_control={
     maintain: function(name){
@@ -110,6 +111,9 @@ var room_control={
 
 			if(room.memory.harvesters>0){roleUpgrader.spawn(room,spawn);}
 			if(room.controller.level>1){
+				if(room.memory.Boo){
+					roleBoo.spawn(room,room.memory.Boo.target,room.memory.Boo.safe,spawn);
+				}
 			    if(room.memory.claim){
 				    claim.claim(room,room.memory.claim,spawn);
 			    }
