@@ -14,7 +14,7 @@ var spawnkill ={
     },
     run: function(creep){
 
-        if(creep.room.name==creep.memory.targetroom){
+        iif(creep.room.name==creep.memory.targetroom){
             if(creep.memory.target==undefined || creep.memory.target=='empty'){
                 var spawn=creep.room.find(FIND_HOSTILE_SPAWNS);
                 if(spawn.length>0){
@@ -42,7 +42,18 @@ var spawnkill ={
             }
         }
         else{
-            creep.moveToRoom(creep.memory.targetroom);
+            if(creep.memory.target == undefined || creep.memory.target=='empty'){
+                creep.moveToRoom(creep.memory.targetroom);
+            }
+            else{
+                 var target=Game.getObjectById(creep.memory.target);
+                if(target!=null){
+                    if(creep.dismantle(target)==ERR_NOT_IN_RANGE){
+                        creep.moveToObject(target);
+                    }
+                }
+                else{creep.memory.target='empty';}               
+            }
         }
     },
 };
