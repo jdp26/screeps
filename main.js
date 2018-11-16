@@ -22,7 +22,7 @@ global.user=require('user');
 const profiler = require('screeps-profiler');
 profiler.enable();
 var roleDismantle=require('role.dismantler');
-var roleBoo=require('roleBoo.js')
+var roleBoo=require('role.Boo.js')
 
 module.exports.loop = function () {
  
