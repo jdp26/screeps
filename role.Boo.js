@@ -30,7 +30,7 @@ var roleBoo = {
 	},
 	
 	spawn: function(room,target,safety,spawn){
-		var peakBoo = _.filter(Game.creeps, (c)=> c.role=='peaker').length;
+		var peakBoo = _.filter(Game.creeps, (c)=> c.memory.role=='peaker').length;
 		if(peakBoo<4){
 			var Body=[];
 			var engy=room.energyAvailable;
