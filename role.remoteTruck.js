@@ -9,7 +9,7 @@ var roleRemoteTruck ={
             }
             if(currentRoom != home){
                 creep.moveToRoom(home);
-				if(creep.memory.harvesttarget != undefined){
+                if(creep.memory.harvesttarget != undefined){
                     delete creep.memory.harvesttarget;
                 }
             }
@@ -85,7 +85,7 @@ var roleRemoteTruck ={
 					    }
 					}
 					else{
-					    if(creep.memory.harvesttarget==undefined){
+					    if(creep.memory.harvesttarget==undefined || creep.memory.harvesttarget =='empty'){
 						    creep.moveToRoom(mine);
 					    }
 					    else{
