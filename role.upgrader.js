@@ -81,7 +81,7 @@ var roleUpgrader = {
 		}
 		if(room.controller.level==7){num=2;}
 		if(room.controller.level==8){num=1;}
-        if(upgraders==0){
+        if(upgraders==0 && room.controller.level!=8){
             Body=[WORK,CARRY,MOVE,MOVE];
 			energyReq=250;
         }
