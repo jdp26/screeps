@@ -417,7 +417,7 @@ var room_control={
 				reciever = Game.getObjectById(output.name);
 			}
 		}
-		if(reciever.energy<reciever.energyCapacity){
+		if(reciever != undefined && reciever.energy<reciever.energyCapacity){
 		for(var input of room.memory.link){
 			if(input.type=='input'){
 				var transmitter = Game.getObjectById(input.name);
