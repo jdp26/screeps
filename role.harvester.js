@@ -82,7 +82,8 @@ var roleHarvester = {
         
         if(harvesters<(num*creepsPerSource)){
 	         
-                    if(spawn.spawnCreep(Body, newName, {memory: {role: 'harvester'}})==0){					
+                    if(spawn.spawnCreep(Body, newName, {memory: {role: 'harvester'}})==0){
+			    room.memory.harvesters=room.memory.harvesters+1
                     var creep =Game.creeps[newName];
 					creep.memory.home = room.name;
                     var sources = [];
