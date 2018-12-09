@@ -275,7 +275,7 @@ var room_control={
 				if(tower.energy>0){
 					var structures=room.find(FIND_STRUCTURES);
 					var DamagedStructure = _.filter(structures,(structure) => structure.hits < structure.hitsMax && structure.structureType != STRUCTURE_WALL && structure.structureType != STRUCTURE_RAMPART);
-					var allWalls = _.filter(structures, (structure) =>  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits<structure.hitsMax);
+					var allWalls = _.filter(structures, (structure) =>  (structure.structureType == STRUCTURE_WALL || structure.structureType == STRUCTURE_RAMPART) && structure.hits<(Math.min(structure.hitsMax,5000000)));
 					var walls = _.filter(allWalls, (structure) =>  structure.hits < room.memory.wallMax);
 					var wall_hits=1000;
 					if(room.memory.hostile>0) {
