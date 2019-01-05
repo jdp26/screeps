@@ -41,7 +41,7 @@ var roleTrucker = {
 		}
 		if(room.memory.sources.length==1){
 		    num=num/2;
-		    num=Math.min(1,num);
+		    num=Math.min(2,num);
 		}
         if(truckers<num*mult){
             var newName='Trucker'+Game.time;                   

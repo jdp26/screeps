@@ -1,6 +1,6 @@
 var roleDefender ={
     run: function(creep){
-        if(creep.room.name != creep.memory.mine && creep.memory.hostile_target == undefined){
+        if(creep.room.name != creep.memory.mine){
           creep.moveToRoom(creep.memory.mine);  
         }
         else{
@@ -15,6 +15,7 @@ var roleDefender ={
     					if(hostile==null||hostile==undefined){
     						hostile=creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
     						if(hostile!=null){creep.memory.hostile_target=hostile.id;}
+    						else{delete creep.memory.hostile_target;}
     					}					
     				}
                     if(hostile!=null){					

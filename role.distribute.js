@@ -42,7 +42,7 @@ var roleDistribute = {
 						creep.memory.target=targets2[0].id;
 						}
 					}
-					else if (creep.room.storage.store[RESOURCE_ENERGY]>800000 && creep.room.terminal != undefined){
+					else if (creep.room.storage.store[RESOURCE_ENERGY]>500000 && creep.room.terminal != undefined){
 						if(creep.transfer(creep.room.terminal, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 							creep.moveToObject(creep.room.terminal, {visualizePathStyle: {stroke: '#ffffff'}});
 							creep.memory.target=creep.room.terminal.id;

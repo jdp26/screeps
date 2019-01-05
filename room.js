@@ -88,7 +88,7 @@ var room_control={
 				    room_control.linklist(room);
 				}
             }
-			if(room.memory.link.length>0){
+			if(room.memory.link.length>1){
 				room_control.links(room);
 			}
 			if(room.controller.level==6 && extractor.length==0){

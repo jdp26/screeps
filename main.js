@@ -22,7 +22,8 @@ global.user=require('user');
 const profiler = require('screeps-profiler');
 profiler.enable();
 var roleDismantle=require('role.dismantler');
-var roleBoo=require('role.Boo')
+var roleBoo=require('role.Boo');
+var network=require('network');
 
 module.exports.loop = function () {
  
@@ -40,6 +41,9 @@ module.exports.loop = function () {
         var room=Game.rooms[r];
         if(room!= undefined && room.memory.spawns != undefined && room.memory.spawns.length>0){
             room_control.maintain(r);
+            if(room.terminal != null && room.terminal != undefined){
+                network.report(r);
+            }
         }
     }
 	
@@ -111,7 +115,7 @@ module.exports.loop = function () {
 				roleDismantle.run(creep);
 			}
 			if(creep.memory.role=='peaker'){
-				creep.notifyWhenAttacked(false);
+			    creep.notifyWhenAttacked(false);
 				roleBoo.run(creep);
 			}
 			}

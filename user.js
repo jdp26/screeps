@@ -15,7 +15,10 @@ var user ={
 		console.log('Highest: ' + highestprice + ', Amount Remaining after this trade: ' + future);
 		var Value=Math.min(remaining,quantity)*highestprice;
 		console.log('Trade Value: ' + Value);
-		Game.market.deal(id,Math.min(remaining,quantity),room);
+		if(Game.market.deal(id,Math.min(remaining,quantity),room)==0){
+		    console.log('Trade complete');
+		}
+		else{console.log(room + ' trade failed');}
 	},
 	
 	buy: function(resource,quantity,room){

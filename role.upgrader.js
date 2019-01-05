@@ -92,7 +92,7 @@ var roleUpgrader = {
 	        var newName='Upgrader'+Game.time;
              if(spawn.spawnCreep(Body, newName, {memory: {role: 'upgrader', home:room.name}})==0){
                  room.memory.upgraders=room.memory.upgraders+1;
-             };                
+             };           
         }
 	}
 };

@@ -14,7 +14,7 @@ var spawnkill ={
     },
     run: function(creep){
 
-        iif(creep.room.name==creep.memory.targetroom){
+        if(creep.room.name==creep.memory.targetroom){
             if(creep.memory.target==undefined || creep.memory.target=='empty'){
                 var spawn=creep.room.find(FIND_HOSTILE_SPAWNS);
                 if(spawn.length>0){
