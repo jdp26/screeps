@@ -41,9 +41,9 @@ module.exports.loop = function () {
         var room=Game.rooms[r];
         if(room!= undefined && room.memory.spawns != undefined && room.memory.spawns.length>0){
             room_control.maintain(r);
-            if(room.terminal != null && room.terminal != undefined){
-                network.report(r);
-            }
+                if(room.terminal != null && room.terminal != undefined){
+                    network.report(r);
+                }
         }
     }
 	
@@ -125,6 +125,8 @@ module.exports.loop = function () {
         else{
             Game.notify('Bucket Low, skipped Tick',5);
         }
+        
+    console.log(Game.cpu.getUsed()+' cpu used this tick. ' + Game.cpu.bucket + ' remaining in the bucket.');
     });
 
 
