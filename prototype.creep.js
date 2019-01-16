@@ -16,6 +16,18 @@ module.exports = function () {
 				return this.memory.workParts;
 			}
 		};
+	Creep.prototype.countHeal=
+		function(){
+				var count=0;
+				for(var part of this.body){
+					if(part.type==HEAL && part.hits>0){
+						count=count+1;
+					}
+				}
+				this.memory.workHeal=count;
+				return count;
+
+		};
 	//Creep Movement prototypes.
 	Creep.prototype.moveToRoom =
 		function(room){
