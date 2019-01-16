@@ -7,13 +7,20 @@ var roleDefender ={
                 if(Memory.hostile[creep.room.name].hostileCount>0){
     				var hostile;
     				if(creep.memory.hostile_target==undefined){
-    					hostile=creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+    					var hostiles=creep.room.find(FIND_HOSTILE_CREEPS, {filter: h=> h.owner.username!='Kraetzin' && h.owner.username!='demawi'});
+    					if(hostiles.length!=0){
+    					hostile=creep.pos.findClosestByPath(hostiles);
     					if(hostile!=null){creep.memory.hostile_target=hostile.id;}
+    					}
+    					else{
+    					    hostile=null;
+    					}
     				}
     				else{
     					hostile=Game.getObjectById(creep.memory.hostile_target);
     					if(hostile==null||hostile==undefined){
-    						hostile=creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS);
+    						var hostiles=creep.room.find(FIND_HOSTILE_CREEPS, {filter: h=> h.owner.username!='Kraetzin' && h.owner.username!='demawi'});
+    						hostile=creep.pos.findClosestByPath(hostiles);
     						if(hostile!=null){creep.memory.hostile_target=hostile.id;}
     						else{delete creep.memory.hostile_target;}
     					}					
@@ -22,6 +29,9 @@ var roleDefender ={
                     if(creep.attack(hostile)==ERR_NOT_IN_RANGE){
                         creep.moveToObject(hostile);
                     }}
+                    else{
+                        creep.moveToCenter();
+                    }
                     
                 }
 				else{
