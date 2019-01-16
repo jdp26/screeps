@@ -21,9 +21,7 @@ var network={
 		if(mnr.energyinRoom>550000 && mnr.terminalEnergy>50000){
 				network.shareEnergy(room);
 		}
-
-		
-		if(mnr.terminalEnergy>50000 && (_.sum(Game.rooms[room].terminal.store)-mnr.terminalEnergy)>20000){
+		else if(mnr.terminalEnergy>25000 && (_.sum(Game.rooms[room].terminal.store)-mnr.terminalEnergy)>20000){
 			network.sellResources(room);
 		}
 	},

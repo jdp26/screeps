@@ -250,7 +250,7 @@ var room_control={
 					room.memory.mineralGofer=1;
 				}
 				
-				if(room.terminal.store[RESOURCE_ENERGY]>10000 && room.storage.store[RESOURCE_ENERGY]<500000 && room.memory.miniGofer==0){
+				if(room.terminal.store[RESOURCE_ENERGY]>10000 && room.storage.store[RESOURCE_ENERGY]<450000 && room.memory.miniGofer==0){
 				    gofer.spawnMini(room.name,RESOURCE_ENERGY,room.terminal.id,room.storage.id,spawn);
 				}
 			}
